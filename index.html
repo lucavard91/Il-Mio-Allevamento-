@@ -96,7 +96,7 @@
     <div class="card">
       <h2>🐦 Soggetti</h2>
       <p>Gestisci tutti i tuoi uccelli.</p>
-      <button onclick="apriSezione('Soggetti')">Apri Soggetti</button>
+      <button onclick="apriSoggetti()">Apri Soggetti</button>
     </div>
 
     <div class="card">
@@ -154,8 +154,20 @@
       const messaggio = document.getElementById("messaggio");
       messaggio.textContent = "Hai selezionato: " + nome;
     }
-
-    console.log("MyAgari Manager: JavaScript attivo");
+ function apriSoggetti() {
+  const messaggio = document.getElementById("messaggio");
+  messaggio.innerHTML = `
+    <div class="card">
+      <h2>🐦 Soggetti</h2>
+      <p>Qui potremo gestire tutti i soggetti del tuo allevamento.</p>
+      <button onclick="tornaHome()">← Torna alla schermata principale</button>
+    </div>
+  `;
+}
+ function tornaHome() {
+  location.reload();
+}
+console.log("MyAgari Manager: JavaScript attivo");
   </script>
 
 </body>
