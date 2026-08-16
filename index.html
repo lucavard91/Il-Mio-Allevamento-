@@ -965,7 +965,7 @@ async function loginSupabase() {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
-  });
+  }); 
 
   if (error) {
     message.textContent = error.message;
