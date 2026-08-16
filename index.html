@@ -128,7 +128,13 @@ label {
 </head>
 
 <body>
-
+<div id="loginScreen">
+  <h2>Accedi</h2>
+  <input id="loginEmail" type="email" placeholder="Email">
+  <input id="loginPassword" type="password" placeholder="Password">
+  <button onclick="loginSupabase()">Accedi</button>
+  <p id="loginMessage"></p>
+</div>
 <header>
   <h1>🐦 MyAgari Manager</h1>
   <p>Gestione del mio allevamento</p>
@@ -136,7 +142,7 @@ label {
 
 <div class="container">
 
-<section id="home">
+<section id="home" style="display:none;"></section>
   <div class="grid">
 
     <div class="card">
@@ -209,7 +215,7 @@ label {
 
     <h3>Nuovo soggetto</h3>
 
-    <label>Anellino</label>
+    <label>Anellino</labe lo l>
     <input id="s_anellino" placeholder="Es. IT 26 001">
 
     <label>Nome</label>
@@ -492,7 +498,11 @@ label {
 </section>
 
 </div>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script>
+const SUPABASE_URL = "https://mddsmqwfufzebahemxcn.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kZHNtcXdmdWZ6ZWJhaGVteGNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzOTMyMTksImV4cCI6MjEwMTk2OTIxOX0.UXzR227VZ1EBwq4fuGapZQen3ekGvGIzezfvJZbXojY";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const sezioni = [
   "home",
@@ -571,7 +581,7 @@ function salvaSoggetto() {
     anellino: document.getElementById("s_anellino").value,
     nome: document.getElementById("s_nome").value,
     sesso: document.getElementById("s_sesso").value,
-    data: document.getElementById("s_data").value,
+    data: document.getElemen poi tById("s_data").value,
     specie: document.getElementById("s_specie").value,
     razza: document.getElementById("s_razza").value,
     mutazione: document.getElementById("s_mutazione").value,
@@ -947,6 +957,24 @@ apriPagina("home");
 
 console.log("MyAgari Manager: JavaScript attivo");
 
+async function loginSupabase() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const message = document.getElementById('loginMessage');
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
+
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('home').style.display = '';
+}
 </script>
 
 </body>
