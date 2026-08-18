@@ -128,6 +128,7 @@ label {
 </head>
 
 <body>
+
 <div id="loginScreen">
   <h2>Accedi</h2>
   <input id="loginEmail" type="email" placeholder="Email">
@@ -135,6 +136,7 @@ label {
   <button onclick="loginSupabase()">Accedi</button>
   <p id="loginMessage"></p>
 </div>
+
 <header>
   <h1>🐦 MyAgari Manager</h1>
   <p>Gestione del mio allevamento</p>
@@ -142,7 +144,7 @@ label {
 
 <div class="container">
 
-<section id="home" style="display:none;"></section>
+<section id="home">
   <div class="grid">
 
     <div class="card">
@@ -209,13 +211,15 @@ label {
     <button onclick="mostraFormSoggetto()">+ Nuovo soggetto</button>
   </div>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div id="formSoggetto" class="card hidden">
 
     <h3>Nuovo soggetto</h3>
 
-    <label>Anellino</labe lo l>
+    <label>Anellino</label>
     <input id="s_anellino" placeholder="Es. IT 26 001">
 
     <label>Nome</label>
@@ -252,8 +256,13 @@ label {
     <label>Note</label>
     <textarea id="s_note" rows="4"></textarea>
 
-    <button class="success" onclick="salvaSoggetto()">Salva soggetto</button>
-    <button class="secondary" onclick="nascondiFormSoggetto()">Annulla</button>
+    <button class="success" onclick="salvaSoggetto()">
+      Salva soggetto
+    </button>
+
+    <button class="secondary" onclick="nascondiFormSoggetto()">
+      Annulla
+    </button>
 
   </div>
 
@@ -268,7 +277,9 @@ label {
     <button onclick="mostraForm('formCoppia')">+ Nuova coppia</button>
   </div>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div id="formCoppia" class="card hidden">
 
@@ -286,8 +297,13 @@ label {
     <label>Data formazione</label>
     <input id="c_data" type="date">
 
-    <button class="success" onclick="salvaCoppia()">Salva coppia</button>
-    <button class="secondary" onclick="nascondiForm('formCoppia')">Annulla</button>
+    <button class="success" onclick="salvaCoppia()">
+      Salva coppia
+    </button>
+
+    <button class="secondary" onclick="nascondiForm('formCoppia')">
+      Annulla
+    </button>
 
   </div>
 
@@ -299,10 +315,14 @@ label {
 
   <div class="page-title">
     <h2>🐣 Riproduzione</h2>
-    <button onclick="mostraForm('formRiproduzione')">+ Nuova riproduzione</button>
+    <button onclick="mostraForm('formRiproduzione')">
+      + Nuova riproduzione
+    </button>
   </div>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div id="formRiproduzione" class="card hidden">
 
@@ -323,8 +343,13 @@ label {
     <label>Note</label>
     <textarea id="r_note"></textarea>
 
-    <button class="success" onclick="salvaRiproduzione()">Salva</button>
-    <button class="secondary" onclick="nascondiForm('formRiproduzione')">Annulla</button>
+    <button class="success" onclick="salvaRiproduzione()">
+      Salva
+    </button>
+
+    <button class="secondary" onclick="nascondiForm('formRiproduzione')">
+      Annulla
+    </button>
 
   </div>
 
@@ -336,7 +361,9 @@ label {
 
   <h2>🌳 Genealogia</h2>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div class="card">
 
@@ -346,9 +373,12 @@ label {
     </p>
 
     <label>Cerca soggetto</label>
-    <input id="cercaGenealogia"
-           placeholder="Nome o anellino"
-           oninput="mostraGenealogia()">
+
+    <input
+      id="cercaGenealogia"
+      placeholder="Nome o anellino"
+      oninput="mostraGenealogia()"
+    >
 
     <div id="risultatoGenealogia"></div>
 
@@ -360,10 +390,14 @@ label {
 
   <div class="page-title">
     <h2>🏠 Gabbie</h2>
-    <button onclick="mostraForm('formGabbia')">+ Nuova gabbia</button>
+    <button onclick="mostraForm('formGabbia')">
+      + Nuova gabbia
+    </button>
   </div>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div id="formGabbia" class="card hidden">
 
@@ -376,8 +410,13 @@ label {
     <label>Note</label>
     <textarea id="g_note"></textarea>
 
-    <button class="success" onclick="salvaGabbia()">Salva gabbia</button>
-    <button class="secondary" onclick="nascondiForm('formGabbia')">Annulla</button>
+    <button class="success" onclick="salvaGabbia()">
+      Salva gabbia
+    </button>
+
+    <button class="secondary" onclick="nascondiForm('formGabbia')">
+      Annulla
+    </button>
 
   </div>
 
@@ -389,7 +428,9 @@ label {
 
   <h2>🌾 Alimentazione</h2>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div class="card">
 
@@ -404,7 +445,9 @@ label {
     <label>Note</label>
     <textarea id="a_note"></textarea>
 
-    <button class="success" onclick="salvaAlimentazione()">Salva</button>
+    <button class="success" onclick="salvaAlimentazione()">
+      Salva
+    </button>
 
   </div>
 
@@ -416,7 +459,9 @@ label {
 
   <h2>💍 Anellini</h2>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div class="card">
 
@@ -433,7 +478,9 @@ label {
       <option>Utilizzato</option>
     </select>
 
-    <button class="success" onclick="salvaAnellino()">Salva anellino</button>
+    <button class="success" onclick="salvaAnellino()">
+      Salva anellino
+    </button>
 
   </div>
 
@@ -445,7 +492,9 @@ label {
 
   <h2>📅 Calendario</h2>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div class="card">
 
@@ -458,7 +507,9 @@ label {
     <label>Note</label>
     <textarea id="cal_note"></textarea>
 
-    <button class="success" onclick="salvaCalendario()">Salva evento</button>
+    <button class="success" onclick="salvaCalendario()">
+      Salva evento
+    </button>
 
   </div>
 
@@ -470,7 +521,9 @@ label {
 
   <h2>❤️ Salute</h2>
 
-  <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
+  <button class="secondary back" onclick="tornaHome()">
+    ← Torna alla schermata principale
+  </button>
 
   <div class="card">
 
@@ -489,7 +542,9 @@ label {
     <label>Note</label>
     <textarea id="sal_note"></textarea>
 
-    <button class="success" onclick="salvaSalute()">Salva</button>
+    <button class="success" onclick="salvaSalute()">
+      Salva
+    </button>
 
   </div>
 
@@ -498,11 +553,17 @@ label {
 </section>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
- <script>
+
+<script>
 const SUPABASE_URL = "https://mddsmqwfufzebahemxcn.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kZHNtcXdmdWZ6ZWJhaGVteGNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzOTMyMTksImV4cCI6MjEwMTk2OTIxOX0.UXzR227VZ1EBwq4fuGapZQen3ekGvGIzezfvJZbXojY";
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZGRzbXF3ZnVmemViYWhlbXhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzOTMyMTksImV4cCI6MjEwMTk2OTIxOX0.UXzR227VZ1EBwq4fuGapZQen3ekGvGIzezfvJZbXojY";
+
+const sb = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
 const sezioni = [
   "home",
@@ -538,10 +599,14 @@ function apriPagina(nome) {
   if (nome === "riproduzione") aggiornaRiproduzione();
   if (nome === "genealogia") mostraGenealogia();
   if (nome === "gabbie") aggiornaGabbie();
-  if (nome === "alimentazione") aggiornaLista("alimentazione", "listaAlimentazione");
-  if (nome === "anellini") aggiornaLista("anellini", "listaAnellini");
-  if (nome === "calendario") aggiornaLista("calendario", "listaCalendario");
-  if (nome === "salute") aggiornaLista("salute", "listaSalute");
+  if (nome === "alimentazione")
+    aggiornaLista("alimentazione", "listaAlimentazione");
+  if (nome === "anellini")
+    aggiornaLista("anellini", "listaAnellini");
+  if (nome === "calendario")
+    aggiornaLista("calendario", "listaCalendario");
+  if (nome === "salute")
+    aggiornaLista("salute", "listaSalute");
 }
 
 function tornaHome() {
@@ -549,29 +614,37 @@ function tornaHome() {
 }
 
 function mostraFormSoggetto() {
-  document.getElementById("formSoggetto").classList.remove("hidden");
+  document.getElementById("formSoggetto")
+    .classList.remove("hidden");
 }
 
 function nascondiFormSoggetto() {
-  document.getElementById("formSoggetto").classList.add("hidden");
+  document.getElementById("formSoggetto")
+    .classList.add("hidden");
 }
 
 function mostraForm(id) {
-  document.getElementById(id).classList.remove("hidden");
+  document.getElementById(id)
+    .classList.remove("hidden");
 }
 
 function nascondiForm(id) {
-  document.getElementById(id).classList.add("hidden");
+  document.getElementById(id)
+    .classList.add("hidden");
 }
 
 function leggiDati(nome) {
-  return JSON.parse(localStorage.getItem("myagari_" + nome) || "[]");
+  return JSON.parse(
+    localStorage.getItem("myagari_" + nome) || "[]"
+  );
 }
 
 function salvaDati(nome, dati) {
-  localStorage.setItem("myagari_" + nome, JSON.stringify(dati));
+  localStorage.setItem(
+    "myagari_" + nome,
+    JSON.stringify(dati)
+  );
 }
-
 
 /* SOGGETTI */
 
@@ -581,7 +654,7 @@ function salvaSoggetto() {
     anellino: document.getElementById("s_anellino").value,
     nome: document.getElementById("s_nome").value,
     sesso: document.getElementById("s_sesso").value,
-    data: document.getElemen poi tById("s_data").value,
+    data: document.getElementById("s_data").value,
     specie: document.getElementById("s_specie").value,
     razza: document.getElementById("s_razza").value,
     mutazione: document.getElementById("s_mutazione").value,
@@ -597,15 +670,19 @@ function salvaSoggetto() {
   }
 
   const dati = leggiDati("soggetti");
+
   dati.push(soggetto);
+
   salvaDati("soggetti", dati);
 
-  document.querySelectorAll("#formSoggetto input, #formSoggetto textarea")
+  document
+    .querySelectorAll("#formSoggetto input, #formSoggetto textarea")
     .forEach(el => el.value = "");
 
   document.getElementById("s_sesso").value = "";
 
   nascondiFormSoggetto();
+
   aggiornaSoggetti();
 }
 
@@ -615,18 +692,22 @@ function aggiornaSoggetti() {
   const dati = leggiDati("soggetti");
 
   if (dati.length === 0) {
+
     lista.innerHTML = `
       <div class="card empty">
         Nessun soggetto inserito.<br><br>
         Premi <b>+ Nuovo soggetto</b> per iniziare.
       </div>
     `;
+
     return;
   }
 
   lista.innerHTML = dati.map((s, index) => `
     <div class="item">
+
       <h3>🐦 ${s.nome || "Senza nome"}</h3>
+
       <p><b>Anellino:</b> ${s.anellino || "-"}</p>
       <p><b>Sesso:</b> ${s.sesso || "-"}</p>
       <p><b>Specie:</b> ${s.specie || "-"}</p>
@@ -634,24 +715,30 @@ function aggiornaSoggetti() {
       <p><b>Mutazione:</b> ${s.mutazione || "-"}</p>
       <p><b>Nascita:</b> ${s.data || "-"}</p>
       <p><b>Gabbia:</b> ${s.gabbia || "-"}</p>
-      <button class="danger" onclick="eliminaSoggetto(${index})">
+
+      <button
+        class="danger"
+        onclick="eliminaSoggetto(${index})">
         Elimina
       </button>
+
     </div>
   `).join("");
 }
 
 function eliminaSoggetto(index) {
 
-  if (!confirm("Vuoi eliminare questo soggetto?")) return;
+  if (!confirm("Vuoi eliminare questo soggetto?"))
+    return;
 
   const dati = leggiDati("soggetti");
+
   dati.splice(index, 1);
 
   salvaDati("soggetti", dati);
+
   aggiornaSoggetti();
 }
-
 
 /* COPPIE */
 
@@ -665,10 +752,13 @@ function salvaCoppia() {
   };
 
   const dati = leggiDati("coppie");
+
   dati.push(coppia);
+
   salvaDati("coppie", dati);
 
   nascondiForm("formCoppia");
+
   aggiornaCoppie();
 }
 
@@ -678,24 +768,31 @@ function aggiornaCoppie() {
   const dati = leggiDati("coppie");
 
   if (!dati.length) {
-    lista.innerHTML = `<div class="card empty">Nessuna coppia inserita.</div>`;
+    lista.innerHTML =
+      `<div class="card empty">Nessuna coppia inserita.</div>`;
     return;
   }
 
   lista.innerHTML = dati.map((c, i) => `
     <div class="item">
+
       <h3>👫 Coppia ${i + 1}</h3>
+
       <p><b>Maschio:</b> ${c.maschio || "-"}</p>
       <p><b>Femmina:</b> ${c.femmina || "-"}</p>
       <p><b>Gabbia:</b> ${c.gabbia || "-"}</p>
       <p><b>Data:</b> ${c.data || "-"}</p>
-      <button class="danger" onclick="eliminaElemento('coppie', ${i})">Elimina</button>
+
+      <button
+        class="danger"
+        onclick="eliminaElemento('coppie', ${i})">
+        Elimina
+      </button>
+
     </div>
   `).join("");
 }
-
-
-/* RIPRODUZIONE */
+  /* RIPRODUZIONE */
 
 function salvaRiproduzione() {
 
@@ -708,10 +805,13 @@ function salvaRiproduzione() {
   };
 
   const dati = leggiDati("riproduzione");
+
   dati.push(r);
+
   salvaDati("riproduzione", dati);
 
   nascondiForm("formRiproduzione");
+
   aggiornaRiproduzione();
 }
 
@@ -721,19 +821,28 @@ function aggiornaRiproduzione() {
   const dati = leggiDati("riproduzione");
 
   if (!dati.length) {
-    lista.innerHTML = `<div class="card empty">Nessuna riproduzione inserita.</div>`;
+    lista.innerHTML =
+      `<div class="card empty">Nessuna riproduzione inserita.</div>`;
     return;
   }
 
   lista.innerHTML = dati.map((r, i) => `
     <div class="item">
+
       <h3>🐣 Riproduzione ${i + 1}</h3>
+
       <p><b>Coppia:</b> ${r.coppia || "-"}</p>
       <p><b>Data:</b> ${r.data || "-"}</p>
       <p><b>Uova:</b> ${r.uova || "-"}</p>
       <p><b>Nati:</b> ${r.nati || "-"}</p>
       <p><b>Note:</b> ${r.note || "-"}</p>
-      <button class="danger" onclick="eliminaElemento('riproduzione', ${i})">Elimina</button>
+
+      <button
+        class="danger"
+        onclick="eliminaElemento('riproduzione', ${i})">
+        Elimina
+      </button>
+
     </div>
   `).join("");
 }
@@ -750,10 +859,13 @@ function salvaGabbia() {
   };
 
   const dati = leggiDati("gabbie");
+
   dati.push(g);
+
   salvaDati("gabbie", dati);
 
   nascondiForm("formGabbia");
+
   aggiornaGabbie();
 }
 
@@ -763,16 +875,25 @@ function aggiornaGabbie() {
   const dati = leggiDati("gabbie");
 
   if (!dati.length) {
-    lista.innerHTML = `<div class="card empty">Nessuna gabbia inserita.</div>`;
+    lista.innerHTML =
+      `<div class="card empty">Nessuna gabbia inserita.</div>`;
     return;
   }
 
   lista.innerHTML = dati.map((g, i) => `
     <div class="item">
+
       <h3>🏠 Gabbia ${g.numero || i + 1}</h3>
+
       <p><b>Posizione:</b> ${g.posizione || "-"}</p>
       <p><b>Note:</b> ${g.note || "-"}</p>
-      <button class="danger" onclick="eliminaElemento('gabbie', ${i})">Elimina</button>
+
+      <button
+        class="danger"
+        onclick="eliminaElemento('gabbie', ${i})">
+        Elimina
+      </button>
+
     </div>
   `).join("");
 }
@@ -782,8 +903,9 @@ function aggiornaGabbie() {
 
 function mostraGenealogia() {
 
-  const cerca = (document.getElementById("cercaGenealogia")?.value || "")
-    .toLowerCase();
+  const cerca =
+    (document.getElementById("cercaGenealogia")?.value || "")
+      .toLowerCase();
 
   const dati = leggiDati("soggetti");
 
@@ -792,22 +914,35 @@ function mostraGenealogia() {
     (s.anellino || "").toLowerCase().includes(cerca)
   );
 
-  const contenitore = document.getElementById("risultatoGenealogia");
+  const contenitore =
+    document.getElementById("risultatoGenealogia");
 
   if (!risultati.length) {
+
     contenitore.innerHTML = `
       <div class="empty">
         Nessun soggetto trovato.
       </div>
     `;
+
     return;
   }
 
   contenitore.innerHTML = risultati.map(s => `
     <div class="item">
+
       <h3>🌳 ${s.nome || s.anellino}</h3>
-      <p><b>Padre:</b> ${s.padre || "Non registrato"}</p>
-      <p><b>Madre:</b> ${s.madre || "Non registrata"}</p>
+
+      <p>
+        <b>Padre:</b>
+        ${s.padre || "Non registrato"}
+      </p>
+
+      <p>
+        <b>Madre:</b>
+        ${s.madre || "Non registrata"}
+      </p>
+
     </div>
   `).join("");
 }
@@ -820,13 +955,22 @@ function salvaAlimentazione() {
   const dati = leggiDati("alimentazione");
 
   dati.push({
-    alimento: document.getElementById("a_alimento").value,
-    quantita: document.getElementById("a_quantita").value,
-    note: document.getElementById("a_note").value
+    alimento:
+      document.getElementById("a_alimento").value,
+
+    quantita:
+      document.getElementById("a_quantita").value,
+
+    note:
+      document.getElementById("a_note").value
   });
 
   salvaDati("alimentazione", dati);
-  aggiornaLista("alimentazione", "listaAlimentazione");
+
+  aggiornaLista(
+    "alimentazione",
+    "listaAlimentazione"
+  );
 }
 
 
@@ -837,13 +981,22 @@ function salvaAnellino() {
   const dati = leggiDati("anellini");
 
   dati.push({
-    numero: document.getElementById("an_numero").value,
-    anno: document.getElementById("an_anno").value,
-    stato: document.getElementById("an_stato").value
+    numero:
+      document.getElementById("an_numero").value,
+
+    anno:
+      document.getElementById("an_anno").value,
+
+    stato:
+      document.getElementById("an_stato").value
   });
 
   salvaDati("anellini", dati);
-  aggiornaLista("anellini", "listaAnellini");
+
+  aggiornaLista(
+    "anellini",
+    "listaAnellini"
+  );
 }
 
 
@@ -854,13 +1007,22 @@ function salvaCalendario() {
   const dati = leggiDati("calendario");
 
   dati.push({
-    data: document.getElementById("cal_data").value,
-    evento: document.getElementById("cal_evento").value,
-    note: document.getElementById("cal_note").value
+    data:
+      document.getElementById("cal_data").value,
+
+    evento:
+      document.getElementById("cal_evento").value,
+
+    note:
+      document.getElementById("cal_note").value
   });
 
   salvaDati("calendario", dati);
-  aggiornaLista("calendario", "listaCalendario");
+
+  aggiornaLista(
+    "calendario",
+    "listaCalendario"
+  );
 }
 
 
@@ -871,15 +1033,28 @@ function salvaSalute() {
   const dati = leggiDati("salute");
 
   dati.push({
-    soggetto: document.getElementById("sal_soggetto").value,
-    data: document.getElementById("sal_data").value,
-    problema: document.getElementById("sal_problema").value,
-    trattamento: document.getElementById("sal_trattamento").value,
-    note: document.getElementById("sal_note").value
+    soggetto:
+      document.getElementById("sal_soggetto").value,
+
+    data:
+      document.getElementById("sal_data").value,
+
+    problema:
+      document.getElementById("sal_problema").value,
+
+    trattamento:
+      document.getElementById("sal_trattamento").value,
+
+    note:
+      document.getElementById("sal_note").value
   });
 
   salvaDati("salute", dati);
-  aggiornaLista("salute", "listaSalute");
+
+  aggiornaLista(
+    "salute",
+    "listaSalute"
+  );
 }
 
 
@@ -887,15 +1062,20 @@ function salvaSalute() {
 
 function aggiornaLista(tipo, id) {
 
-  const lista = document.getElementById(id);
+  const lista =
+    document.getElementById(id);
 
   if (!lista) return;
 
   const dati = leggiDati(tipo);
 
   if (!dati.length) {
+
     lista.innerHTML =
-      `<div class="card empty">Nessun elemento inserito.</div>`;
+      `<div class="card empty">
+        Nessun elemento inserito.
+      </div>`;
+
     return;
   }
 
@@ -909,11 +1089,15 @@ function aggiornaLista(tipo, id) {
 
     return `
       <div class="item">
+
         ${testo}
-        <button class="danger"
+
+        <button
+          class="danger"
           onclick="eliminaElemento('${tipo}', ${index})">
           Elimina
         </button>
+
       </div>
     `;
 
@@ -923,7 +1107,8 @@ function aggiornaLista(tipo, id) {
 
 function eliminaElemento(tipo, index) {
 
-  if (!confirm("Vuoi eliminare questo elemento?")) return;
+  if (!confirm("Vuoi eliminare questo elemento?"))
+    return;
 
   const dati = leggiDati(tipo);
 
@@ -932,22 +1117,40 @@ function eliminaElemento(tipo, index) {
   salvaDati(tipo, dati);
 
   const mappa = {
+
     coppie: "listaCoppie",
+
     riproduzione: "listaRiproduzione",
+
     gabbie: "listaGabbie",
+
     alimentazione: "listaAlimentazione",
+
     anellini: "listaAnellini",
+
     calendario: "listaCalendario",
+
     salute: "listaSalute"
+
   };
 
   if (mappa[tipo]) {
-    aggiornaLista(tipo, mappa[tipo]);
+
+    aggiornaLista(
+      tipo,
+      mappa[tipo]
+    );
+
   }
 
-  if (tipo === "coppie") aggiornaCoppie();
-  if (tipo === "riproduzione") aggiornaRiproduzione();
-  if (tipo === "gabbie") aggiornaGabbie();
+  if (tipo === "coppie")
+    aggiornaCoppie();
+
+  if (tipo === "riproduzione")
+    aggiornaRiproduzione();
+
+  if (tipo === "gabbie")
+    aggiornaGabbie();
 }
 
 
@@ -955,26 +1158,50 @@ function eliminaElemento(tipo, index) {
 
 apriPagina("home");
 
-console.log("MyAgari Manager: JavaScript attivo");
+console.log(
+  "MyAgari Manager: JavaScript attivo"
+);
+
+
+/* LOGIN SUPABASE */
 
 async function loginSupabase() {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  const message = document.getElementById('loginMessage');
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  }); 
+  const email =
+    document.getElementById("loginEmail").value;
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+  const { data, error } =
+    await sb.auth.signInWithPassword({
+
+      email,
+      password
+
+    });
 
   if (error) {
-    message.textContent = error.message;
+
+    message.textContent =
+      error.message;
+
     return;
   }
 
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('home').style.display = '';
+  document.getElementById(
+    "loginScreen"
+  ).style.display = "none";
+
+  document.getElementById(
+    "home"
+  ).style.display = "";
+
 }
+
 </script>
 
 </body>
