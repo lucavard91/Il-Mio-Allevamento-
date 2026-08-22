@@ -501,6 +501,7 @@ async function salvaGabbia(){
   try{
     const record={numero:valore("g_numero"),posizione:valore("g_posizione"),tipo:valore("g_tipo"),
       capacita:numero("g_capacita"),
+capacita_soggetti:numero("g_capacita_soggetti"),
       "coppia_soggetti":valore("g_coppia_soggetti"),stato:valore("g_stato"),note:valore("g_note")};
     await inserisci("gabbie",record);pulisciForm("formGabbia");nascondiForm("formGabbia");await aggiornaGabbie();
   }catch(e){errore(e)}
