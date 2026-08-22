@@ -184,7 +184,7 @@ label{font-weight:bold}.hidden{display:none}.page-title{display:flex;justify-con
   <div class="page-title"><h2>💍 Anellini</h2><button onclick="mostraForm('formAnellino')">+ Nuovo anellino</button></div>
   <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
   <div id="formAnellino" class="card hidden">
-    <label>Anno</label><input id="an_anno" type="number"><label>Anno</label><input id="an_anno" type="number"><label>Numero</label><input id="an_numero">
+    <label>Anno</label><input id="an_anno" type="number">
     <label>Colore</label><input id="an_colore">
     <label>Misura</label><input id="an_misura">
     <label>Tipo</label><input id="an_tipo">
@@ -425,7 +425,7 @@ async function salvaSoggetto(){
       razza:valore("s_razza"),mutazione:valore("s_mutazione"),sesso:valore("s_sesso"),
       data_nascita:valore("s_data")||null,anellino:valore("s_anellino"),
       gabbia:valore("s_gabbia"),padre:valore("s_padre"),madre:valore("s_madre"),
-      stato:valore("s_stato"),foto_url:valore("s_foto_url"),note:valore("s_note")
+      stato:valore("s_stato"),foto_url:null,note:valore("s_note")
     };
     if(!record.nome&&!record.anellino&&!record.codice){alert("Inserisci almeno nome, anellino o codice.");return}
     await inserisci("soggetti",record);pulisciForm("formSoggetto");nascondiForm("formSoggetto");await aggiornaSoggetti();
