@@ -458,14 +458,13 @@ async function aggiornaSoggetti(){
     if(!dati.length){lista.innerHTML='<div class="card empty">Nessun soggetto inserito.</div>';return}
     lista.innerHTML=dati.map(s=>`
       <div class="item">
-        <h3>🐦 ${esc(s.nome||"Senza nome")}</h3>
-        <p><b>Codice:</b> ${esc(s.codice||"-")}</p>
-        <p><b>Anellino:</b> ${esc(s.anellino||"-")}</p>
+        <h3>🐦 ${esc((s.anno||"-")+" / "+(s.numero||"-"))}</h3>
+        <p><b>Anno:</b> ${esc(s.anno||"-")}</p>
+        <p><b>Numero:</b> ${esc(s.numero||"-")}</p>
         <p><b>Sesso:</b> ${esc(s.sesso||"-")}</p>
         <p><b>Specie:</b> ${esc(s.specie||"-")}</p>
         <p><b>Razza:</b> ${esc(s.razza||"-")}</p>
         <p><b>Mutazione:</b> ${esc(s.mutazione||"-")}</p>
-        <p><b>Nascita:</b> ${esc(s.data_nascita||"-")}</p>
         <p><b>Gabbia:</b> ${esc(s.gabbia||"-")}</p>
         <p><b>Padre:</b> ${esc(s.padre||"-")} &nbsp; <b>Madre:</b> ${esc(s.madre||"-")}</p>
         <p><b>Stato:</b> ${esc(s.stato||"-")}</p>
@@ -480,8 +479,8 @@ async function cercaSoggetto(){
     const numero=document.getElementById("cercaNumeroSoggetto").value.trim();
     const dati=await leggi("soggetti");
     const risultati=dati.filter(s=>{
-      const anellino=(s.anellino||"").toString();
-      return anellino.includes(numero) && (!anno || anellino.includes(anno));
+      return String(s.numero||"").trim()===numero &&
+       String(s.anno||"").trim()===anno;
     });
     mostraRisultatiSoggetti(risultati);
   }catch(e){errore(e)}
@@ -502,14 +501,17 @@ function mostraRisultatiSoggetti(dati){
   }
   lista.innerHTML=dati.map(s=>`
     <div class="item">
-      <h3>🐦 ${esc(s.nome||"Senza nome")}</h3>
-      <p><b>Codice:</b> ${esc(s.codice||"-")}</p>
-      <p><b>Anellino:</b> ${esc(s.anellino||"-")}</p>
+      <h3>🐦 ${esc((s.anno||"-")+" / "+(s.numero||"-"))}</h3>
+      <p><b>Anno:</b> ${esc(s.anno||"-")}</p>
+      <p><b>Numero:</b> ${esc(s.numero||"-")}</p>
       <p><b>Sesso:</b> ${esc(s.sesso||"-")}</p>
       <p><b>Specie:</b> ${esc(s.specie||"-")}</p>
+      <p><b>Razza:</b> ${esc(s.razza||"-")}</p>
+      <p><b>Mutazione:</b> ${esc(s.mutazione||"-")}</p>
       <p><b>Gabbia:</b> ${esc(s.gabbia||"-")}</p>
       <p><b>Padre:</b> ${esc(s.padre||"-")} &nbsp; <b>Madre:</b> ${esc(s.madre||"-")}</p>
       <p><b>Stato:</b> ${esc(s.stato||"-")}</p>
+      <p><b>Note:</b> ${esc(s.note||"-")}</p>
     </div>`).join("");
 }
 async function salvaCoppia(){
