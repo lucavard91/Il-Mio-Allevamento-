@@ -477,9 +477,7 @@ async function aggiornaCoppie(){
 
 async function salvaRiproduzione(){
   try{
-    const record={coppia_nidiata:valore("r_coppia_nidiata"),data_deposizione:valore("r_data_deposizione")||null,
-      uova:numero("r_uova"),feconde:numero("r_feconde"),schiuse:numero("r_schiuse"),svezzati:numero("r_spezzati"),
-      data_svezzamento:valore("r_data_spezzamento")||null,stato:valore("r_stato"),note:valore("r_note")};
+    const record={coppia:valore("r_coppia_nidiata"),nidiata:null,data_deposizione:valore("r_data_deposizione")||null,uova:numero("r_uova"),feconde:numero("r_feconde"),schiuse:numero("r_schiuse"),svezzati:numero("r_spezzati"),data_svezzamento:valore("r_data_spezzamento")||null,stato:valore("r_stato"),note:valore("r_note")};
     await inserisci("riproduzione",record);pulisciForm("formRiproduzione");nascondiForm("formRiproduzione");await aggiornaRiproduzione();
   }catch(e){errore(e)}
 }
