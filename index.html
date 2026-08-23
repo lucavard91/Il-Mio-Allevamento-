@@ -80,11 +80,10 @@ label{font-weight:bold}.hidden{display:none}.page-title{display:flex;justify-con
   <button class="secondary back" onclick="tornaHome()">← Torna alla schermata principale</button>
   <div id="formSoggetto" class="card hidden">
     <h3>Nuovo soggetto</h3>
-    <label>Codice</label><input id="s_codice" placeholder="Codice soggetto">
-    <label>Anellino</label><input id="s_anellino" placeholder="Es. IT 26 001">
-    <label>Nome</label><input id="s_nome" placeholder="Nome del soggetto">
+    <label>Anno</label><input id="s_anno" type="number" placeholder="Es. 2026">
+<label>Numero</label><input id="s_numero" placeholder="Es. 53">
     <label>Sesso</label><select id="s_sesso"><option value="">Seleziona</option><option>Maschio</option><option>Femmina</option></select>
-    <label>Data di nascita</label><input id="s_data" type="date">
+    
     <label>Specie</label><input id="s_specie" placeholder="Es. Canarino">
     <label>Razza</label><input id="s_razza" placeholder="Es. Spagnolo">
     <label>Mutazione</label><input id="s_mutazione" placeholder="Es. Giallo intenso">
@@ -433,14 +432,24 @@ sb.auth.getSession().then(({data})=>{
 async function salvaSoggetto(){
   try{
     const record={
-      codice:valore("s_codice"),nome:valore("s_nome"),specie:valore("s_specie"),
-      razza:valore("s_razza"),mutazione:valore("s_mutazione"),sesso:valore("s_sesso"),
-      data_nascita:valore("s_data")||null,anellino:valore("s_anellino"),
-      gabbia:valore("s_gabbia"),padre:valore("s_padre"),madre:valore("s_madre"),
-      stato:valore("s_stato"),foto_url:null,note:valore("s_note")
+      anno:numero("s_anno"),
+      numero:valore("s_numero"),
+      specie:valore("s_specie"),
+      razza:valore("s_razza"),
+      mutazione:valore("s_mutazione"),
+      sesso:valore("s_sesso"),
+      gabbia:valore("s_gabbia"),
+      padre:valore("s_padre"),
+      madre:valore("s_madre"),
+      stato:valore("s_stato"),
+      foto_url:null,
+      note:valore("s_note")
     };
-    if(!record.nome&&!record.anellino&&!record.codice){alert("Inserisci almeno nome, anellino o codice.");return}
-    await inserisci("soggetti",record);pulisciForm("formSoggetto");nascondiForm("formSoggetto");await aggiornaSoggetti();
+    if(!record.anno&&!record.numero){alert("Inserisci almeno anno e numero.");return}
+    await inserisci("soggetti",record);
+    pulisciForm("formSoggetto");
+    nascondiForm("formSoggetto");
+    await aggiornaSoggetti();
   }catch(e){errore(e)}
 }
 async function aggiornaSoggetti(){
