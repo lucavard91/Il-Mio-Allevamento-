@@ -530,12 +530,78 @@ async function aggiornaCoppie(){
       <p><b>Maschio:</b> ${esc(c.maschio||"-")}</p><p><b>Femmina:</b> ${esc(c.femmina||"-")}</p>
       <p><b>Data formazione:</b> ${esc(c.data_formazione||"-")}</p><p><b>Stato:</b> ${esc(c.stato||"-")}</p>
       <p><b>Nidi attivi:</b> ${c.nidi_attivi??"-"}</p><p><b>Note:</b> ${esc(c.note||"-")}</p>
+      <button onclick="modificaCoppia('${c.id}')">✏️ Modifica</button>
       <button class="danger" onclick="eliminaRecord('coppie','${c.id}','coppie')">Elimina</button>
     </div>`).join("");
   }catch(e){errore(e)}
 }
+async function modificaCoppia(id){
+  try{
+    const dati=await leggi("coppie");
+    const c=dati.find(x=>String(x.id)===String(id));
+    if(!c){alert("Coppia non trovata.");return}
 
-async function salvaRiproduzione(){
+    document.getElementById("c_codice").value=c.codice||"";
+    document.getElementById("c_maschio").value=c.maschio||"";
+    document.getElementById("c_femmina").value=c.femmina||"";
+    document.getElementById("c_data").value=c.data_formazione||"";
+    document.getElementById("c_stato").value=c.stato||"";
+    document.getElementById("c_id_attivi").value=c.nidi_attivi??"";
+    document.getElementById("c_note").value=c.note||"";
+
+    mostraForm("formCoppia");
+
+    const form=document.getElementById("formCoppia");
+    form.dataset.modificaId=id;
+
+    const bottone=form.querySelector(".success");
+    bottone.textContent="💾 Salva modifica";
+    bottone.onclick=()=>salvaModificaCoppia();
+
+  }catch(e){errore(e)}
+}
+async function salvaModificaCoppia(){
+  try{
+    const form=document.getElementById("formCoppia");
+    const id=form.dataset.modificaId;
+
+    if(!id){
+      alert("Nessuna coppia selezionata per la modifica.");
+      return;
+    }
+
+    const record={
+      codice:valore("c_codice"),
+      maschio:valore("c_maschio"),
+      femmina:valore("c_femmina"),
+      data_formazione:valore("c_data")||null,
+      stato:valore("c_stato"),
+      nidi_attivi:numero("c_id_attivi"),
+      note:valore("c_note")
+    };
+
+    const {error}=await sb.from("coppie")
+      .update(record)
+      .eq("id",id);
+
+    if(error)throw error;
+
+    delete form.dataset.modificaId;
+    pulisciForm("formCoppia");
+    nascondiForm("formCoppia");
+
+    const bottone=form.querySelector(".success");
+    bottone.textContent="Salva coppia";
+    bottone.onclick=()=>salvaCoppia();
+
+    await aggiornaCoppie();
+
+    alert("Coppia modificata correttamente.");
+  }catch(e){
+    errore(e);
+  }
+}
+  async function salvaRiproduzione(){
   try{
     const record={coppia:valore("r_coppia_nidiata"),nidiata:null,data_deposizione:valore("r_data_deposizione")||null,uova:numero("r_uova"),feconde:numero("r_feconde"),schiuse:numero("r_schiuse"),svezzati:numero("r_spezzati"),data_svezzamento:valore("r_data_spezzamento")||null,stato:valore("r_stato"),note:valore("r_note")};
     await inserisci("riproduzione",record);pulisciForm("formRiproduzione");nascondiForm("formRiproduzione");await aggiornaRiproduzione();
