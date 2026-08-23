@@ -719,10 +719,16 @@ async function mostraGenealogia(){
   String(f.padre||"").trim()===String(s.numero||"").trim() ||
   String(f.madre||"").trim()===String(s.numero||"").trim()
 );
-      return `<div class="item"><h3>🌳 ${esc(s.nome||s.codice||s.anellino)}</h3>
+      return `<div class="item"><h3>🌳 ${esc((s.anno&&s.numero)?`${s.anno} / ${s.numero}`:(s.numero||"-"))}</h3>
         <p><b>Padre:</b> ${esc(s.padre||"Non registrato")}</p><p><b>Madre:</b> ${esc(s.madre||"Non registrata")}</p>
-        <p><b>Discendenza registrata:</b> ${figli.length}</p>
-       ${figli.length?`<p>${figli.map(f=>esc((f.anno&&f.numero)?`${f.anno} / ${f.numero}`:(f.numero||"-"))).join(", ")}</p>`:""}
+        <p><b>Figli:</b> ${figli.length}</p>
+${figli.length?`<div>${figli.map(f=>`
+  <p>
+    <b>${esc((f.anno&&f.numero)?`${f.anno} / ${f.numero}`:(f.numero||"-"))}</b>
+    — Padre: ${esc(f.padre||"Non registrato")}
+    · Madre: ${esc(f.madre||"Non registrata")}
+  </p>
+`).join("")}</div>`:""}
       </div>`;
     }).join("");
   }catch(e){errore(e)}
