@@ -637,7 +637,7 @@ async function aggiornaGabbie(){
     lista.innerHTML=dati.map(g=>`<div class="item">
       <h3>🏠 Gabbia ${esc(g.numero||"-")}</h3><p><b>Posizione:</b> ${esc(g.posizione||"-")}</p>
       <p><b>Tipo:</b> ${esc(g.tipo||"-")}</p><p><b>Capacità:</b> ${g.capacita??"-"}</p>
-      <p><b>Coppia/soggetti:</b> ${esc(g.coppia_soggetti||"-")}</p><p><b>Stato:</b> ${esc(g.stato||"-")}</p><p><b>Note:</b> ${esc(g.note||"-")}</p>
+      <p><b>Coppia:</b> ${esc(g.coppia_soggetti||"-")}</p>
       <button class="danger" onclick="eliminaRecord('gabbie','${g.id}','gabbie')">Elimina</button>
     </div>`).join("");
   }catch(e){errore(e)}
