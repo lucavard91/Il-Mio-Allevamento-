@@ -709,9 +709,9 @@ async function mostraGenealogia(){
     soggettiCache=await leggi("soggetti");
     const cerca=(valore("cercaGenealogia")||"").toLowerCase();
     const risultati=soggettiCache.filter(s=>
-      (s.nome||"").toLowerCase().includes(cerca)||
-      (s.codice||"").toLowerCase().includes(cerca)||
-      (s.anellino||"").toLowerCase().includes(cerca));
+  String(s.numero||"").toLowerCase().includes(cerca)||
+  String(s.anno||"").toLowerCase().includes(cerca)||
+  String(s.specie||"").toLowerCase().includes(cerca));
     const contenitore=document.getElementById("risultatoGenealogia");
     if(!risultati.length){contenitore.innerHTML='<div class="empty">Nessun soggetto trovato.</div>';return}
     contenitore.innerHTML=risultati.map(s=>{
