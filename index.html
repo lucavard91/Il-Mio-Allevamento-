@@ -97,6 +97,15 @@ label{font-weight:bold}.hidden{display:none}.page-title{display:flex;justify-con
     <label>Note</label><textarea id="s_note" rows="4"></textarea>
     <button class="success" onclick="salvaSoggetto()">Salva soggetto</button><button class="secondary" onclick="nascondiForm('formSoggetto')">Annulla</button>
   </div>
+  <div class="card">
+  <h3>🔎 Cerca soggetto</h3>
+  <label>Anno anellino</label>
+  <input id="cercaAnnoSoggetto" type="number" placeholder="Es. 2026">
+  <label>Numero anellino</label>
+  <input id="cercaNumeroSoggetto" placeholder="Es. 53">
+  <button onclick="cercaSoggetto()">🔍 Cerca</button>
+  <button class="secondary" onclick="mostraTuttiSoggetti()">Mostra tutti</button>
+</div>
   <div id="listaSoggetti"></div>
 </section>
 
@@ -456,7 +465,44 @@ async function aggiornaSoggetti(){
       </div>`).join("");
   }catch(e){errore(e)}
 }
+async function cercaSoggetto(){
+  try{
+    const anno=document.getElementById("cercaAnnoSoggetto").value.trim();
+    const numero=document.getElementById("cercaNumeroSoggetto").value.trim();
+    const dati=await leggi("soggetti");
+    const risultati=dati.filter(s=>{
+      const anellino=(s.anellino||"").toString();
+      return anellino.includes(numero) && (!anno || anellino.includes(anno));
+    });
+    mostraRisultatiSoggetti(risultati);
+  }catch(e){errore(e)}
+}
 
+async function mostraTuttiSoggetti(){
+  try{
+    const dati=await leggi("soggetti");
+    mostraRisultatiSoggetti(dati);
+  }catch(e){errore(e)}
+}
+
+function mostraRisultatiSoggetti(dati){
+  const lista=document.getElementById("listaSoggetti");
+  if(!dati.length){
+    lista.innerHTML='<div class="card empty">Nessun soggetto trovato.</div>';
+    return;
+  }
+  lista.innerHTML=dati.map(s=>`
+    <div class="item">
+      <h3>🐦 ${esc(s.nome||"Senza nome")}</h3>
+      <p><b>Codice:</b> ${esc(s.codice||"-")}</p>
+      <p><b>Anellino:</b> ${esc(s.anellino||"-")}</p>
+      <p><b>Sesso:</b> ${esc(s.sesso||"-")}</p>
+      <p><b>Specie:</b> ${esc(s.specie||"-")}</p>
+      <p><b>Gabbia:</b> ${esc(s.gabbia||"-")}</p>
+      <p><b>Padre:</b> ${esc(s.padre||"-")} &nbsp; <b>Madre:</b> ${esc(s.madre||"-")}</p>
+      <p><b>Stato:</b> ${esc(s.stato||"-")}</p>
+    </div>`).join("");
+}
 async function salvaCoppia(){
   try{
     const record={codice:valore("c_codice"),maschio:valore("c_maschio"),femmina:valore("c_femmina"),
