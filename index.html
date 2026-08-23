@@ -395,8 +395,10 @@ async function mostraApp(){
     const u=await utenteCorrente();
     document.getElementById("utenteLoggato").textContent="Account: "+(u.email||"utente");
     mostraStatoAccount();
-    if(profilo.ruolo==="admin"){document.querySelector("#home .grid").insertAdjacentHTML("beforeend",`<div class="card"><h2>👑 Amministrazione</h2><p>Gestisci utenti e scadenze.</p><button onclick="apriPagina('admin')">Apri amministrazione</button></div>`)}
-  }catch(e){errore(e)}
+if(profilo.ruolo==="admin" && !document.getElementById("adminCard")){
+  document.querySelector("#home .grid").insertAdjacentHTML("beforeend",`<div class="card" id="adminCard"><h2>👑 Amministrazione</h2><p>Gestisci utenti e scadenze.</p><button onclick="apriPagina('admin')">Apri amministrazione</button></div>`)
+}
+}catch(e){errore(e)}
   apriPagina("home");
 }
 sb.auth.onAuthStateChange((event,session)=>{
