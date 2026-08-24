@@ -761,31 +761,70 @@ let soggettiCache=[];
 async function mostraGenealogia(){
   try{
     soggettiCache=await leggi("soggetti");
+
     const cerca=(valore("cercaGenealogia")||"").toLowerCase();
+
     const risultati=soggettiCache.filter(s=>
-  String(s.numero||"").toLowerCase().includes(cerca)||
-  String(s.anno||"").toLowerCase().includes(cerca)||
-  String(s.specie||"").toLowerCase().includes(cerca));
+      String(s.numero||"").toLowerCase().includes(cerca)||
+      String(s.anno||"").toLowerCase().includes(cerca)||
+      String(s.specie||"").toLowerCase().includes(cerca)
+    );
+
     const contenitore=document.getElementById("risultatoGenealogia");
-    if(!risultati.length){contenitore.innerHTML='<div class="empty">Nessun soggetto trovato.</div>';return}
+
+    if(!risultati.length){
+      contenitore.innerHTML='<div class="empty">Nessun soggetto trovato.</div>';
+      return;
+    }
+
     contenitore.innerHTML=risultati.map(s=>{
       const figli=soggettiCache.filter(f=>
-  String(f.padre||"").trim()===String(s.numero||"").trim() ||
-  String(f.madre||"").trim()===String(s.numero||"").trim()
-);
-      return `<div class="item"><h3>🌳 ${esc((s.anno&&s.numero)?`${s.anno} / ${s.numero}`:(s.numero||"-"))}</h3>
-        <p><b>Padre:</b> ${esc(s.padre||"Non registrato")}</p><p><b>Madre:</b> ${esc(s.madre||"Non registrata")}</p>
+        String(f.padre||"").trim()===String(s.numero||"").trim() ||
+        String(f.madre||"").trim()===String(s.numero||"").trim()
+      );
+
+      const padre=s.padre
+        ? `${s.padre}${s.anno?` (${s.anno})`:""}`
+        : "Non registrato";
+
+      const madre=s.madre
+        ? `${s.madre}${s.anno?` (${s.anno})`:""}`
+        : "Non registrata";
+
+      return `<div class="item">
+        <h3>🌳 ${esc((s.anno&&s.numero)?`${s.anno} / ${s.numero}`:(s.numero||"-"))}</h3>
+
+        <p><b>Padre:</b> ${esc(padre)}</p>
+        <p><b>Madre:</b> ${esc(madre)}</p>
         <p><b>Figli:</b> ${figli.length}</p>
-${figli.length?`<div>${figli.map(f=>`
-  <p>
-    <b>${esc((f.anno&&f.numero)?`${f.anno} / ${f.numero}`:(f.numero||"-"))}</b>
-    — Padre: ${esc(f.padre||"Non registrato")}
-    · Madre: ${esc(f.madre||"Non registrata")}
-  </p>
-`).join("")}</div>`:""}
+
+        ${figli.length?`
+          <div>
+            ${figli.map(f=>{
+              const padreFiglio=f.padre
+                ? `${f.padre}${f.anno?` (${f.anno})`:""}`
+                : "Non registrato";
+
+              const madreFiglio=f.madre
+                ? `${f.madre}${f.anno?` (${f.anno})`:""}`
+                : "Non registrata";
+
+              return `
+                <p>
+                  <b>${esc((f.anno&&f.numero)?`${f.numero} (${f.anno})`:(f.numero||"-"))}</b>
+                  — Padre: ${esc(padreFiglio)}
+                  · Madre: ${esc(madreFiglio)}
+                </p>
+              `;
+            }).join("")}
+          </div>
+        `:""}
       </div>`;
     }).join("");
-  }catch(e){errore(e)}
+
+  }catch(e){
+    errore(e);
+  }
 }
 function esc(v){
   return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
