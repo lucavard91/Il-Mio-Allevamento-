@@ -533,10 +533,13 @@ async function aggiornaCoppie(){
     }
 
     lista.innerHTML=dati.map(c=>{
-      const gabbia=gabbie.find(g=>
-        String(g.coppia_soggetti||"").trim().toLowerCase()===
-        String(c.codice||"").trim().toLowerCase()
-      );
+      const normalizzaCodice=v=>
+  String(v||"").replace(/\s+/g,"").toLowerCase();
+
+const gabbia=gabbie.find(g=>
+  normalizzaCodice(g.coppia_soggetti)===
+  normalizzaCodice(c.codice)
+);
 
       return `<div class="item">
         <h3>👫 ${esc(c.codice||"Coppia")}</h3>
