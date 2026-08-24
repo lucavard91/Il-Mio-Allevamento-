@@ -645,15 +645,33 @@ async function salvaModificaCoppia(){
 }
 async function aggiornaRiproduzione(){
   try{
-    const dati=await leggi("riproduzione"),lista=document.getElementById("listaRiproduzione");
-    if(!dati.length){lista.innerHTML='<div class="card empty">Nessuna riproduzione inserita.</div>';return}
-    lista.innerHTML=dati.map(r=>`<div class="item">
-      <h3>🐣 ${esc(r.coppia||r.nidiata||"Riproduzione")}</h3>
-      <p><b>Deposizione:</b> ${esc(r.data_deposizione||"-")}</p>
-      <p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Spezzati:</b> ${r.svezzati??"-"}</p>
-      <p><b>Data spezzamento:</b> ${esc(r.data_svezzamento||"-")}</p><p><b>Stato:</b> ${esc(r.stato||"-")}</p><p><b>Note:</b> ${esc(r.note||"-")}</p>
-      <button class="danger" onclick="eliminaRecord('riproduzione','${r.id}','riproduzione')">Elimina</button>
-    </div>`).join("");
+    const dati=await leggi("riproduzione");
+    const coppie=await leggi("coppie");
+    const lista=document.getElementById("listaRiproduzione");
+
+    if(!dati.length){
+      lista.innerHTML='<div class="card empty">Nessuna riproduzione inserita.</div>';
+      return;
+    }
+
+    lista.innerHTML=dati.map(r=>{
+      const coppia=coppie.find(c=>
+        String(c.codice||"").replace(/\s+/g,"").toLowerCase()===
+        String(r.coppia||"").replace(/\s+/g,"").toLowerCase()
+      );
+
+      return `<div class="item">
+        <h3>🐣 ${esc(r.coppia||r.nidiata||"Riproduzione")}</h3>
+        <p><b>Maschio:</b> ${esc(coppia?.maschio||"Non registrato")}</p>
+        <p><b>Femmina:</b> ${esc(coppia?.femmina||"Non registrata")}</p>
+        <p><b>Deposizione:</b> ${esc(r.data_deposizione||"-")}</p>
+        <p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Spezzati:</b> ${r.svezzati??"-"}</p>
+        <p><b>Data spezzamento:</b> ${esc(r.data_svezzamento||"-")}</p>
+        <p><b>Stato:</b> ${esc(r.stato||"-")}</p>
+        <p><b>Note:</b> ${esc(r.note||"-")}</p>
+        <button class="danger" onclick="eliminaRecord('riproduzione','${r.id}','riproduzione')">Elimina</button>
+      </div>`;
+    }).join("");
   }catch(e){errore(e)}
 }
 
