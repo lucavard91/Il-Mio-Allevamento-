@@ -136,7 +136,7 @@ label{font-weight:bold}.hidden{display:none}.page-title{display:flex;justify-con
     <label>Feconde</label><input id="r_feconde" type="number" min="0">
     <label>Schiuse</label><input id="r_schiuse" type="number" min="0">
     <label>Spezzati</label><input id="r_spezzati" type="number" min="0">
-    <label>Data spezzamento</label><input id="r_data_spezzamento" type="date">
+    <label>Data svezzamento</label><input id="r_data_spezzamento" type="date">
     <label>Stato</label><input id="r_stato" placeholder="Es. In corso / Terminata">
     <label>Note</label><textarea id="r_note"></textarea>
     <button class="success" onclick="salvaRiproduzione()">Salva</button><button class="secondary" onclick="nascondiForm('formRiproduzione')">Annulla</button>
@@ -632,7 +632,7 @@ async function salvaModificaCoppia(){
       feconde:numero("r_feconde"),
       schiuse:numero("r_schiuse"),
       svezzati:numero("r_spezzati"),
-      data_svezzamento:valore("r_data_spezzamento")||null,
+      data_svezzamento:valore("r_data_svezzamento")||null,
       stato:valore("r_stato"),
       note:valore("r_note")
     };
@@ -666,7 +666,7 @@ async function aggiornaRiproduzione(){
         <p><b>Femmina:</b> ${esc(coppia?.femmina||"Non registrata")}</p>
         <p><b>Deposizione:</b> ${esc(r.data_deposizione||"-")}</p>
         <p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Spezzati:</b> ${r.svezzati??"-"}</p>
-        <p><b>Data spezzamento:</b> ${esc(r.data_svezzamento||"-")}</p>
+        <p><b>Data svezzamento:</b> ${esc(r.data_svezzamento||"-")}</p>
         <p><b>Stato:</b> ${esc(r.stato||"-")}</p>
         <p><b>Note:</b> ${esc(r.note||"-")}</p>
         <button class="danger" onclick="eliminaRecord('riproduzione','${r.id}','riproduzione')">Elimina</button>
