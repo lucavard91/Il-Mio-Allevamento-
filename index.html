@@ -783,6 +783,14 @@ async function mostraGenealogia(){
         String(f.madre||"").trim()===String(s.numero||"").trim()
       );
 
+      const fratelli=soggettiCache.filter(f=>
+        String(f.numero||"").trim()!==String(s.numero||"").trim() &&
+        String(f.padre||"").trim()===String(s.padre||"").trim() &&
+        String(f.madre||"").trim()===String(s.madre||"").trim() &&
+        String(s.padre||"").trim()!=="" &&
+        String(s.madre||"").trim()!==""
+      );
+
       const padre=s.padre
         ? `${s.padre}${s.anno?` (${s.anno})`:""}`
         : "Non registrato";
@@ -796,6 +804,20 @@ async function mostraGenealogia(){
 
         <p><b>Padre:</b> ${esc(padre)}</p>
         <p><b>Madre:</b> ${esc(madre)}</p>
+
+        <p><b>Fratelli / sorelle:</b> ${fratelli.length}</p>
+
+        ${fratelli.length?`
+          <div>
+            ${fratelli.map(f=>`
+              <p>
+                <b>${esc((f.anno&&f.numero)?`${f.numero} (${f.anno})`:(f.numero||"-"))}</b>
+                — Sesso: ${esc(f.sesso||"Non definito")}
+              </p>
+            `).join("")}
+          </div>
+        `:""}
+
         <p><b>Figli:</b> ${figli.length}</p>
 
         ${figli.length?`
@@ -826,9 +848,3 @@ async function mostraGenealogia(){
     errore(e);
   }
 }
-function esc(v){
-  return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-}
-</script>
-</body>
-</html>
