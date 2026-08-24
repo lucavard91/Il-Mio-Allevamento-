@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+no<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -523,16 +523,34 @@ async function salvaCoppia(){
 }
 async function aggiornaCoppie(){
   try{
-    const dati=await leggi("coppie"),lista=document.getElementById("listaCoppie");
-    if(!dati.length){lista.innerHTML='<div class="card empty">Nessuna coppia inserita.</div>';return}
-    lista.innerHTML=dati.map(c=>`<div class="item">
-      <h3>👫 ${esc(c.codice||"Coppia")}</h3>
-      <p><b>Maschio:</b> ${esc(c.maschio||"-")}</p><p><b>Femmina:</b> ${esc(c.femmina||"-")}</p>
-      <p><b>Data formazione:</b> ${esc(c.data_formazione||"-")}</p><p><b>Stato:</b> ${esc(c.stato||"-")}</p>
-      <p><b>Nidi attivi:</b> ${c.nidi_attivi??"-"}</p><p><b>Note:</b> ${esc(c.note||"-")}</p>
-      <button onclick="modificaCoppia('${c.id}')">✏️ Modifica</button>
-      <button class="danger" onclick="eliminaRecord('coppie','${c.id}','coppie')">Elimina</button>
-    </div>`).join("");
+    const dati=await leggi("coppie");
+    const gabbie=await leggi("gabbie");
+    const lista=document.getElementById("listaCoppie");
+
+    if(!dati.length){
+      lista.innerHTML='<div class="card empty">Nessuna coppia inserita.</div>';
+      return;
+    }
+
+    lista.innerHTML=dati.map(c=>{
+      const gabbia=gabbie.find(g=>
+        String(g.coppia_soggetti||"").trim().toLowerCase()===
+        String(c.codice||"").trim().toLowerCase()
+      );
+
+      return `<div class="item">
+        <h3>👫 ${esc(c.codice||"Coppia")}</h3>
+        <p><b>Maschio:</b> ${esc(c.maschio||"-")}</p>
+        <p><b>Femmina:</b> ${esc(c.femmina||"-")}</p>
+        <p><b>Gabbia:</b> ${esc(gabbia?.numero||"Non assegnata")}</p>
+        <p><b>Data formazione:</b> ${esc(c.data_formazione||"-")}</p>
+        <p><b>Stato:</b> ${esc(c.stato||"-")}</p>
+        <p><b>Nidi attivi:</b> ${c.nidi_attivi??"-"}</p>
+        <p><b>Note:</b> ${esc(c.note||"-")}</p>
+        <button onclick="modificaCoppia('${c.id}')">✏️ Modifica</button>
+        <button class="danger" onclick="eliminaRecord('coppie','${c.id}','coppie')">Elimina</button>
+      </div>`;
+    }).join("");
   }catch(e){errore(e)}
 }
 async function modificaCoppia(id){
