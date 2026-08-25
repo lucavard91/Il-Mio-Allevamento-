@@ -359,6 +359,7 @@ async function salvaProfiloAdmin(id){
   if(error){alert("Errore: "+error.message);return} alert("Profilo aggiornato."); caricaUtentiAdmin();
 }
 async function loginSupabase(){
+  alert("LOGIN FUNZIONA");
   const email=valore("loginEmail"),password=document.getElementById("loginPassword").value;
   if(!email||!password){msg("Inserisci email e password.");return}
   const {error}=await sb.auth.signInWithPassword({email,password});
