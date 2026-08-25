@@ -366,6 +366,7 @@ async function loginSupabase(){
   await mostraApp();
 }
 async function registratiSupabase(){
+  alert("LOGIN FUNZIONA");
   const email=valore("loginEmail"),password=document.getElementById("loginPassword").value;
   if(!email||!password){msg("Inserisci email e password.");return}
   const {data,error}=await sb.auth.signUp({email,password});
