@@ -608,6 +608,47 @@ async function salvaProfiloAdmin(id){
 function bindPageButtons(){
  document.querySelectorAll("[data-page]").forEach(b=>{b.onclick=()=>apriPagina(b.dataset.page);});
 }
+  async function suggerisciCoppieAI(){
+  try{
+    const { data, error } = await supabase
+      .from("soggetti")
+      .select("id,codice,nome,specie,razza,mutazione,sesso,data_nascita,padre,madre,padre_id,madre_id,foto_url,stato,note")
+      .order("nome",{ascending:true});
+
+    if(error){
+      alert("Errore nel caricamento dei soggetti: " + error.message);
+      return;
+    }
+
+    if(!data || data.length === 0){
+      alert("Non ci sono ancora soggetti disponibili per la formazione delle coppie.");
+      return;
+    }
+
+    const maschi = data.filter(s =>
+      String(s.sesso || "").toLowerCase().includes("masch")
+    );
+
+    const femmine = data.filter(s =>
+      String(s.sesso || "").toLowerCase().includes("femm")
+    );
+
+    if(maschi.length === 0 || femmine.length === 0){
+      alert("Per suggerire le coppie servono almeno un maschio e una femmina registrati.");
+      return;
+    }
+
+    alert(
+      "Dati caricati correttamente!\\n\\n" +
+      "Soggetti: " + data.length + "\\n" +
+      "Maschi: " + maschi.length + "\\n" +
+      "Femmine: " + femmine.length
+    );
+
+  }catch(err){
+    alert("Errore imprevisto: " + err.message);
+  }
+}
 function bindUI(){
  bindPageButtons();
  $("btnLogin").onclick=loginSupabase;
