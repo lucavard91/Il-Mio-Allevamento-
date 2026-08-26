@@ -610,7 +610,7 @@ function bindPageButtons(){
 }
   async function suggerisciCoppieAI(){
   try{
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from("soggetti")
       .select("id,codice,nome,specie,razza,mutazione,sesso,data_nascita,padre,madre,padre_id,madre_id,foto_url,stato,note")
       .order("nome",{ascending:true});
