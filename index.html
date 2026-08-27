@@ -141,34 +141,22 @@ label{font-weight:bold}
     <label>Numero</label><input id="s_numero" placeholder="Es. 53">
     <label>Sesso</label><select id="s_sesso"><option value="">Seleziona</option><option>Maschio</option><option>Femmina</option></select>
     <label>Specie</label>
-<select id="s_specie">
-  <option value="">Seleziona la specie</option>
-  <option value="Canarino">Canarino</option>
-</select>
-<label>Razza</label>
-<select id="s_razza">
-  <option value="">Seleziona la razza</option>
-  <option value="Spagnolo">Spagnolo</option>
-  <option value="Fife Fancy">Fife Fancy</option>
-  <option value="Gloster">Gloster</option>
-  <option value="Arricciato del Nord">Arricciato del Nord</option>
-</select>
+<div class="autocomplete">
+  <input id="s_specie" type="text" placeholder="Cerca specie..." autocomplete="off">
+  <div id="suggerimentiSpecie" class="suggerimenti"></div>
+</div>
 
+<label>Razza</label>
+<div class="autocomplete">
+  <input id="s_razza" type="text" placeholder="Cerca razza..." autocomplete="off">
+  <div id="suggerimentiRazza" class="suggerimenti"></div>
+</div>
 
 <label>Mutazione</label>
-<select id="s_mutazione">
-  <option value="">Seleziona la mutazione</option>
-  <option value="Giallo intenso">Giallo intenso</option>
-  <option value="Giallo brinato">Giallo brinato</option>
-  <option value="Bianco recessivo">Bianco recessivo</option>
-  <option value="Verde">Verde</option>
-  <option value="Agata">Agata</option>
-  <option value="Isabella">Isabella</option>
-  <option value="Bruno">Bruno</option>
-  <option value="Pastello">Pastello</option>
-  <option value="Opale">Opale</option>
-  <option value="Satiné">Satiné</option>
-</select>
+<div class="autocomplete">
+  <input id="s_mutazione" type="text" placeholder="Cerca mutazione..." autocomplete="off">
+  <div id="suggerimentiMutazione" class="suggerimenti"></div>
+</div>
     <label>Padre</label><input id="s_padre" placeholder="Anellino, codice o nome">
     <label>Madre</label><input id="s_madre" placeholder="Anellino, codice o nome">
     <label>Gabbia</label><input id="s_gabbia" placeholder="Numero o codice gabbia">
