@@ -6,6 +6,34 @@
 <title>MyAgari Manager</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+ .autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+.suggerimenti {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+.suggerimento-item {
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.suggerimento-item:hover {
+  background: #f0f0f0;
+}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#222}
 header{background:#1f2937;color:#fff;padding:20px;text-align:center}
