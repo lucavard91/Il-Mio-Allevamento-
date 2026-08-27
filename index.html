@@ -446,6 +446,7 @@ async function mostraApp(){
     await apriPagina("home");
   }catch(e){msg("Profilo non disponibile: "+(e?.message||e));}
 }
+ 
 
 async function salvaSoggetto(){
   try{
@@ -457,18 +458,121 @@ async function salvaSoggetto(){
 async function aggiornaSoggetti(){
   try{
     const dati=await leggi("soggetti"),lista=$("listaSoggetti");
-    if(!dati.length){lista.innerHTML='<div class="card empty">Nessun soggetto inserito.</div>';return;}
+
+    if(!dati.length){
+      lista.innerHTML='<div class="card empty">Nessun soggetto inserito.</div>';
+      return;
+    }
+
     lista.innerHTML=dati.map(s=>`<div class="item">
       <h3>🐦 ${esc((s.anno||"-")+" / "+(s.numero||"-"))}</h3>
-      <p><b>Anno:</b> ${esc(s.anno||"-")}</p><p><b>Numero:</b> ${esc(s.numero||"-")}</p>
-      <p><b>Sesso:</b> ${esc(s.sesso||"-")}</p><p><b>Specie:</b> ${esc(s.specie||"-")}</p>
-      <p><b>Razza:</b> ${esc(s.razza||"-")}</p><p><b>Mutazione:</b> ${esc(s.mutazione||"-")}</p>
-      <p><b>Gabbia:</b> ${esc(s.gabbia||"-")}</p><p><b>Padre:</b> ${esc(s.padre||"-")} &nbsp; <b>Madre:</b> ${esc(s.madre||"-")}</p>
-      <p><b>Stato:</b> ${esc(s.stato||"-")}</p><p><b>Note:</b> ${esc(s.note||"-")}</p>
-      <button class="danger" data-delete-table="soggetti" data-delete-id="${esc(s.id)}">Elimina</button>
+
+      <p><b>Anno:</b> ${esc(s.anno||"-")}</p>
+      <p><b>Numero:</b> ${esc(s.numero||"-")}</p>
+      <p><b>Sesso:</b> ${esc(s.sesso||"-")}</p>
+      <p><b>Specie:</b> ${esc(s.specie||"-")}</p>
+      <p><b>Razza:</b> ${esc(s.razza||"-")}</p>
+      <p><b>Mutazione:</b> ${esc(s.mutazione||"-")}</p>
+      <p><b>Gabbia:</b> ${esc(s.gabbia||"-")}</p>
+      <p><b>Padre:</b> ${esc(s.padre||"-")} &nbsp; <b>Madre:</b> ${esc(s.madre||"-")}</p>
+      <p><b>Stato:</b> ${esc(s.stato||"-")}</p>
+      <p><b>Note:</b> ${esc(s.note||"-")}</p>
+
+      <button data-edit-soggetto="${esc(s.id)}">✏️ Modifica</button>
+      <button class="danger" data-delete-table="soggetti" data-delete-id="${esc(s.id)}">🗑️ Elimina</button>
+
     </div>`).join("");
+
     bindDeleteButtons();
-  }catch(e){errore(e);}
+    bindEditSoggetti();
+
+  }catch(e){
+    errore(e);
+  }
+}
+ function bindEditSoggetti(){
+  document.querySelectorAll("[data-edit-soggetto]").forEach(b=>{
+    b.onclick=()=>modificaSoggetto(b.dataset.editSoggetto);
+  });
+}
+
+async function modificaSoggetto(id){
+  try{
+    const s=(await leggi("soggetti")).find(x=>String(x.id)===String(id));
+
+    if(!s){
+      alert("Soggetto non trovato.");
+      return;
+    }
+
+    $("s_anno").value=s.anno||"";
+    $("s_numero").value=s.numero||"";
+    $("s_specie").value=s.specie||"";
+    $("s_razza").value=s.razza||"";
+    $("s_mutazione").value=s.mutazione||"";
+    $("s_sesso").value=s.sesso||"";
+    $("s_gabbia").value=s.gabbia||"";
+    $("s_padre").value=s.padre||"";
+    $("s_madre").value=s.madre||"";
+    $("s_stato").value=s.stato||"";
+    $("s_note").value=s.note||"";
+
+    $("formSoggetto").dataset.modificaId=id;
+
+    mostraForm("formSoggetto");
+
+    $("saveSoggetto").textContent="💾 Salva modifica";
+    $("saveSoggetto").onclick=salvaModificaSoggetto;
+
+  }catch(e){
+    errore(e);
+  }
+}
+ async function salvaModificaSoggetto(){
+  try{
+    const id=$("formSoggetto").dataset.modificaId;
+
+    if(!id){
+      alert("Nessun soggetto selezionato.");
+      return;
+    }
+
+    const record={
+      anno:numero("s_anno"),
+      numero:valore("s_numero"),
+      specie:valore("s_specie"),
+      razza:valore("s_razza"),
+      mutazione:valore("s_mutazione"),
+      sesso:valore("s_sesso"),
+      gabbia:valore("s_gabbia"),
+      padre:valore("s_padre"),
+      madre:valore("s_madre"),
+      stato:valore("s_stato"),
+      note:valore("s_note")
+    };
+
+    const {error}=await sb
+      .from("soggetti")
+      .update(record)
+      .eq("id",id);
+
+    if(error)throw error;
+
+    delete $("formSoggetto").dataset.modificaId;
+
+    pulisciForm("formSoggetto");
+    nascondiForm("formSoggetto");
+
+    $("saveSoggetto").textContent="Salva soggetto";
+    $("saveSoggetto").onclick=salvaSoggetto;
+
+    await aggiornaSoggetti();
+
+    alert("Soggetto modificato correttamente.");
+
+  }catch(e){
+    errore(e);
+  }
 }
 async function cercaSoggetto(){
   try{
