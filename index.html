@@ -319,7 +319,7 @@ function mostraForm(id){toggle(id,true);}
 function nascondiForm(id){toggle(id,false);}
 function pulisciForm(id){
   const box=$(id); if(!box)return;
-  box.querySelectorAll("input,textarea").forEach(e=>{if(e.type!=="file")e.value="";});
+  box.querySelectorAll("input,textarea").forEach(e=>e.value="");
   box.querySelectorAll("select").forEach(e=>e.selectedIndex=0);
 }
 function nascondiTutto(){sezioni.forEach(id=>toggle(id,false));}
