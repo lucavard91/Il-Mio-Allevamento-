@@ -767,7 +767,110 @@ async function suggerisciCoppieAI(){
         escluse.length;
     }
 
-    alert(messaggio);
+    const box = $("risultatoAICoppie");
+
+if(!box){
+  alert("Errore: area risultati AI non trovata.");
+  return;
+}
+
+box.innerHTML = `
+  <div class="ai-coppie-container">
+    <div class="card">
+      <h2>🤖 Formazione coppie con AI</h2>
+      <p class="small">
+        Sono state analizzate ${data.length} soggetti:
+        ${maschi.length} maschi e ${femmine.length} femmine.
+      </p>
+    </div>
+
+    ${valide.map((c,i)=>{
+      const nomeMaschio = c.maschio.nome || c.maschio.codice || "Maschio";
+      const nomeFemmina = c.femmina.nome || c.femmina.codice || "Femmina";
+
+      const razzaMaschio = c.maschio.razza || "Non specificata";
+      const razzaFemmina = c.femmina.razza || "Non specificata";
+
+      const mutazioneMaschio = c.maschio.mutazione || "Non specificata";
+      const mutazioneFemmina = c.femmina.mutazione || "Non specificata";
+
+      let titolo = "Coppia candidata";
+      let icona = "🐦";
+
+      if(i === 0){
+        titolo = "🥇 Coppia consigliata";
+        icona = "⭐";
+      }else if(i === 1){
+        titolo = "🥈 Seconda scelta";
+        icona = "⭐";
+      }else if(i === 2){
+        titolo = "🥉 Terza scelta";
+        icona = "⭐";
+      }
+
+      return `
+        <div class="ai-coppia">
+
+          <h3>${titolo}</h3>
+
+          <div class="ai-stato">
+            ${icona} ${nomeMaschio} × ${nomeFemmina}
+          </div>
+
+          <div class="ai-sezione">
+            <div class="ai-titolo">🐦 Maschio</div>
+            <div>${esc(nomeMaschio)}</div>
+            <div class="small">
+              Razza: ${esc(razzaMaschio)}<br>
+              Mutazione: ${esc(mutazioneMaschio)}
+            </div>
+          </div>
+
+          <div class="ai-sezione">
+            <div class="ai-titolo">🐦 Femmina</div>
+            <div>${esc(nomeFemmina)}</div>
+            <div class="small">
+              Razza: ${esc(razzaFemmina)}<br>
+              Mutazione: ${esc(mutazioneFemmina)}
+            </div>
+          </div>
+
+          <div class="ai-sezione">
+            <div class="ai-titolo">🌳 Genealogia</div>
+            <div class="ai-spiegazione">
+              ${c.motivo ? "⚠️ " + esc(c.motivo) : "✅ Nessuna parentela diretta rilevata"}
+            </div>
+          </div>
+
+          <div class="ai-sezione">
+            <div class="ai-titolo">🎯 Perché viene proposta</div>
+            <div class="ai-spiegazione">
+              Questa coppia sarà analizzata considerando genetica,
+              genealogia e valutazione del soggetto.
+            </div>
+          </div>
+
+          <button class="success" type="button"
+            onclick="alert('La scelta della coppia verrà attivata nel prossimo passaggio.')">
+            💚 Scegli questa coppia
+          </button>
+
+        </div>
+      `;
+    }).join("")}
+
+    ${escluse.length ? `
+      <div class="card">
+        <h3>⚠️ Coppie sconsigliate</h3>
+        <p>
+          Alcune combinazioni sono state escluse per possibile parentela.
+        </p>
+      </div>
+    ` : ""}
+  </div>
+`;
+
+
 
   }catch(err){
     alert("Errore nella formazione delle coppie: " + (err?.message || err));
