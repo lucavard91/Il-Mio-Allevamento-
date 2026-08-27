@@ -1007,6 +1007,81 @@ box.innerHTML = `
     console.error(err);
   }
 }  
+ function attivaSuggerimentiSoggetti(){
+  const dati = {
+    s_specie: [
+      "Canarino"
+    ],
+    s_razza: [
+      "Spagnolo",
+      "Fife Fancy",
+      "Gloster",
+      "Arricciato del Nord"
+    ],
+    s_mutazione: [
+      "Giallo intenso",
+      "Giallo brinato",
+      "Bianco recessivo",
+      "Verde",
+      "Agata",
+      "Isabella",
+      "Bruno",
+      "Pastello",
+      "Opale",
+      "Satiné"
+    ]
+  };
+
+  const configura = (id) => {
+    const input = $(id);
+    if(!input) return;
+
+    let box = input.parentElement.querySelector(".suggerimenti");
+    if(!box){
+      box = document.createElement("div");
+      box.className = "suggerimenti";
+      input.parentElement.appendChild(box);
+    }
+
+    input.addEventListener("input", () => {
+      const testo = input.value.trim().toLowerCase();
+
+      if(!testo){
+        box.innerHTML = "";
+        box.style.display = "none";
+        return;
+      }
+
+      const risultati = dati[id].filter(x =>
+        x.toLowerCase().includes(testo)
+      );
+
+      if(!risultati.length){
+        box.innerHTML = "";
+        box.style.display = "none";
+        return;
+      }
+
+      box.innerHTML = risultati.map(x =>
+        `<div class="suggerimento-item">${esc(x)}</div>`
+      ).join("");
+
+      box.style.display = "block";
+
+      box.querySelectorAll(".suggerimento-item").forEach(item => {
+        item.addEventListener("click", () => {
+          input.value = item.textContent;
+          box.innerHTML = "";
+          box.style.display = "none";
+        });
+      });
+    });
+  };
+
+  configura("s_specie");
+  configura("s_razza");
+  configura("s_mutazione");
+}
 function bindUI(){
  bindPageButtons();
  $("btnLogin").onclick=loginSupabase;
