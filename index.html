@@ -140,9 +140,35 @@ label{font-weight:bold}
     <label>Anno</label><input id="s_anno" type="number" placeholder="Es. 2026">
     <label>Numero</label><input id="s_numero" placeholder="Es. 53">
     <label>Sesso</label><select id="s_sesso"><option value="">Seleziona</option><option>Maschio</option><option>Femmina</option></select>
-    <label>Specie</label><input id="s_specie" placeholder="Es. Canarino">
-    <label>Razza</label><input id="s_razza" placeholder="Es. Spagnolo">
-    <label>Mutazione</label><input id="s_mutazione" placeholder="Es. Giallo intenso">
+    <label>Specie</label>
+<input id="s_specie" list="listaSpecie" placeholder="Inizia a scrivere...">
+<datalist id="listaSpecie">
+  <option value="Canarino">
+</datalist>
+
+<label>Razza</label>
+<input id="s_razza" list="listaRazze" placeholder="Inizia a scrivere...">
+<datalist id="listaRazze">
+  <option value="Spagnolo">
+  <option value="Fife Fancy">
+  <option value="Gloster">
+  <option value="Arricciato del Nord">
+</datalist>
+
+<label>Mutazione</label>
+<input id="s_mutazione" list="listaMutazioni" placeholder="Inizia a scrivere...">
+<datalist id="listaMutazioni">
+  <option value="Giallo intenso">
+  <option value="Giallo brinato">
+  <option value="Bianco recessivo">
+  <option value="Verde">
+  <option value="Agata">
+  <option value="Isabella">
+  <option value="Bruno">
+  <option value="Pastello">
+  <option value="Opale">
+  <option value="Satiné">
+</datalist>
     <label>Padre</label><input id="s_padre" placeholder="Anellino, codice o nome">
     <label>Madre</label><input id="s_madre" placeholder="Anellino, codice o nome">
     <label>Gabbia</label><input id="s_gabbia" placeholder="Numero o codice gabbia">
