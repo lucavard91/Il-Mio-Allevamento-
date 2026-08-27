@@ -608,7 +608,7 @@ async function salvaProfiloAdmin(id){
 function bindPageButtons(){
  document.querySelectorAll("[data-page]").forEach(b=>{b.onclick=()=>apriPagina(b.dataset.page);});
 }
-  async function suggerisciCoppieAI(){
+async function suggerisciCoppieAI(){
   try{
     const { data, error } = await sb
       .from("soggetti")
@@ -634,21 +634,99 @@ function bindPageButtons(){
     );
 
     if(maschi.length === 0 || femmine.length === 0){
-      alert("Per suggerire le coppie servono almeno un maschio e una femmina registrati.");
+      alert("Servono almeno un maschio e una femmina registrati.");
       return;
     }
 
-    alert(
-      "Dati caricati correttamente!\\n\\n" +
-      "Soggetti: " + data.length + "\\n" +
+    const stessoSoggetto = (a,b) => a.id === b.id;
+
+    const sonoGenitoriDiretti = (a,b) => {
+      return a.padre_id === b.id ||
+             a.madre_id === b.id ||
+             b.padre_id === a.id ||
+             b.madre_id === a.id;
+    };
+
+    const sonoFratelli = (a,b) => {
+      if(!a.padre_id || !a.madre_id || !b.padre_id || !b.madre_id) return false;
+
+      return (
+        a.padre_id === b.padre_id &&
+        a.madre_id === b.madre_id
+      );
+    };
+
+    const coppie = [];
+
+    maschi.forEach(maschio => {
+      femmine.forEach(femmina => {
+
+        if(stessoSoggetto(maschio,femmina)) return;
+
+        let esclusa = false;
+        let motivo = "";
+
+        if(sonoGenitoriDiretti(maschio,femmina)){
+          esclusa = true;
+          motivo = "Possibile rapporto genitore/figlio";
+        }
+
+        if(sonoFratelli(maschio,femmina)){
+          esclusa = true;
+          motivo = "Possibile rapporto tra fratelli";
+        }
+
+        coppie.push({
+          maschio,
+          femmina,
+          esclusa,
+          motivo
+        });
+      });
+    });
+
+    const valide = coppie.filter(c => !c.esclusa);
+    const escluse = coppie.filter(c => c.esclusa);
+
+    let messaggio =
+      "🤖 FORMAZIONE COPPIE\\n\\n" +
+      "Soggetti analizzati: " + data.length + "\\n" +
       "Maschi: " + maschi.length + "\\n" +
-      "Femmine: " + femmine.length
-    );
+      "Femmine: " + femmine.length + "\\n\\n" +
+      "Coppie candidate: " + valide.length;
+
+    if(valide.length){
+      messaggio += "\\n\\nCOPPIE CANDIDATE:\\n";
+
+      valide.forEach((c,i) => {
+        const m = c.maschio.nome || c.maschio.codice || "Maschio";
+        const f = c.femmina.nome || c.femmina.codice || "Femmina";
+
+        messaggio +=
+          "\\n" + (i+1) + ". " + m + " × " + f +
+          "\\n   Razza: " +
+          (c.maschio.razza || c.femmina.razza || "non specificata") +
+          "\\n   Mutazione maschio: " +
+          (c.maschio.mutazione || "non specificata") +
+          "\\n   Mutazione femmina: " +
+          (c.femmina.mutazione || "non specificata") +
+          "\\n";
+      });
+    }
+
+    if(escluse.length){
+      messaggio +=
+        "\\n⚠️ Coppie escluse per possibile parentela: " +
+        escluse.length;
+    }
+
+    alert(messaggio);
 
   }catch(err){
-    alert("Errore imprevisto: " + err.message);
+    alert("Errore nella formazione delle coppie: " + (err?.message || err));
+    console.error(err);
   }
-}
+}  
 function bindUI(){
  bindPageButtons();
  $("btnLogin").onclick=loginSupabase;
