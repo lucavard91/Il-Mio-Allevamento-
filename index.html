@@ -629,7 +629,7 @@ async function caricaFotoSoggetto(soggettoId,file){
   if(!file.type.startsWith("image/"))throw new Error("Seleziona un file immagine.");
   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
   const path=`${u.id}/${soggettoId}-${Date.now()}.${ext}`;
-  const up=await sb.storage.from("myagari-foto").upload(path,file,{upsert:true,contentType:file.type});
+  const up=await sb.storage.from("myagari-fot").upload(path,file,{upsert:true,contentType:file.type});
   if(up.error)throw up.error;
   const {data:pub}=sb.storage.from("myagari-foto").getPublicUrl(path);
   const {error}=await sb.from("soggetti").update({foto_url:pub.publicUrl}).eq("id",soggettoId);
