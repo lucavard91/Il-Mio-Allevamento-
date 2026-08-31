@@ -965,7 +965,7 @@ const listaTitoli={quantita:"Quantità",unita:"Unità",coppia_soggetto:"Coppia/s
 async function salvaAlimentazione(){
   try{const r={data:valore("a_data")||null,alimento:valore("a_alimento"),specie_fase:valore("a_fase"),quantita:numero("a_quantita"),unita:valore("a_unita"),frequenza:valore("a_frequenza"),note:valore("a_note")};await inserisci("alimentazione",r);pulisciForm("formAlimentazione");nascondiForm("formAlimentazione");await aggiornaLista("alimentazione");}catch(e){errore(e);}
 }
-}
+
 async function salvaAnellino(){
  try{const r={anno:numero("an_anno"),numero:valore("an_numero"),colore:valore("an_colore"),misura:valore("an_misura"),tipo:valore("an_tipo"),soggetto:valore("an_oggetto"),stato:valore("an_stato"),note:valore("an_note")};await inserisci("anellini",r);pulisciForm("formAnellino");nascondiForm("formAnellino");await aggiornaLista("anellini");}catch(e){errore(e);}
 }
