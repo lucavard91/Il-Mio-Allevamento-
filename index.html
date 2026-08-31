@@ -306,12 +306,36 @@ label{font-weight:bold}
   <div class="page-title"><h2>🌾 Alimentazione</h2><button id="newAlimentazione">+ Nuovo alimento</button></div>
   <button class="secondary back" data-page="home">← Torna alla schermata principale</button>
   <div id="formAlimentazione" class="card hidden">
-    <label>Data</label><input id="a_data" type="date"><label>Alimento</label><input id="a_alimento" placeholder="Es. Miscela semi">
-    <label>Specie</label><input id="a_specie" placeholder="Es. Canarino"><label>Fase</label><input id="a_fase" placeholder="Es. Mantenimento / Cova">
-    <label>Quantità</label><input id="a_quantita" type="number" step="any"><label>Unità</label><input id="a_unita" placeholder="Es. g">
-    <label>Frequenza</label><input id="a_frequenza" placeholder="Es. Giornaliera"><label>Note</label><textarea id="a_note"></textarea>
-    <button id="saveAlimentazione" class="success">Salva</button><button id="cancelAlimentazione" class="secondary">Annulla</button>
-  </div>
+  <label>Data</label>
+  <input id="a_data" type="date">
+
+  <label>Alimento</label>
+  <input id="a_alimento" placeholder="Es. Miscela semi">
+
+  <label>Fase</label>
+  <select id="a_fase">
+    <option value="">Seleziona fase</option>
+    <option value="RIPRODUZIONE">RIPRODUZIONE</option>
+    <option value="MUTA">MUTA</option>
+    <option value="MANTENIMENTO">MANTENIMENTO</option>
+    <option value="RIPOSO">RIPOSO</option>
+  </select>
+
+  <label>Quantità</label>
+  <input id="a_quantita" type="number" step="any">
+
+  <label>Unità</label>
+  <input id="a_unita" placeholder="Es. g">
+
+  <label>Frequenza</label>
+  <input id="a_frequenza" placeholder="Es. Giornaliera">
+
+  <label>Note</label>
+  <textarea id="a_note"></textarea>
+
+  <button id="saveAlimentazione" class="success">Salva</button>
+  <button id="cancelAlimentazione" class="secondary">Annulla</button>
+</div>
   <div id="listaAlimentazione"></div>
 </section>
 
