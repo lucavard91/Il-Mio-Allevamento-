@@ -259,19 +259,47 @@ label{font-weight:bold}
 <section id="riproduzione" class="hidden">
   <div class="page-title"><h2>🐣 Riproduzione</h2><button id="newRiproduzione">+ Nuova riproduzione</button></div>
   <button class="secondary back" data-page="home">← Torna alla schermata principale</button>
+
   <div id="formRiproduzione" class="card hidden">
     <h3>Nuova riproduzione</h3>
-    <label>Coppia</label><input id="r_coppia" placeholder="Es. CP 1">
-    <label>Data deposizione</label><input id="r_data_deposizione" type="date">
-    <label>Uova</label><input id="r_uova" type="number" min="0">
-    <label>Feconde</label><input id="r_feconde" type="number" min="0">
-    <label>Schiuse</label><input id="r_schiuse" type="number" min="0">
-    <label>Svezzati</label><input id="r_svezzati" type="number" min="0">
-    <label>Data svezzamento</label><input id="r_data_svezzamento" type="date">
-    <label>Stato</label><input id="r_stato" placeholder="Es. In corso / Terminata">
-    <label>Note</label><textarea id="r_note"></textarea>
-    <button id="saveRiproduzione" class="success">Salva</button><button id="cancelRiproduzione" class="secondary">Annulla</button>
+
+    <label>Coppia</label>
+    <input id="r_coppia" placeholder="Es. CP 1">
+
+    <label>Data deposizione</label>
+    <input id="r_data_deposizione" type="date">
+
+    <label>Data ultimo uovo deposto</label>
+    <input id="r_data_ultimo_uovo" type="date">
+
+    <label>Data schiusa prevista</label>
+    <input id="r_data_schiusa_prevista" type="date">
+
+    <label>Uova</label>
+    <input id="r_uova" type="number" min="0">
+
+    <label>Feconde</label>
+    <input id="r_feconde" type="number" min="0">
+
+    <label>Schiuse</label>
+    <input id="r_schiuse" type="number" min="0">
+
+    <label>Svezzati</label>
+    <input id="r_svezzati" type="number" min="0">
+
+    <label>Data svezzamento</label>
+    <input id="r_data_svezzamento" type="date">
+
+    <label>Stato</label>
+    <input id="r_stato" placeholder="Es. In corso / Terminata">
+
+    <label>Note</label>
+    <textarea id="r_note"></textarea>
+
+    <button id="saveRiproduzione" class="success">Salva</button>
+    <button id="cancelRiproduzione" class="secondary">Annulla</button>
   </div>
+
   <div id="listaRiproduzione"></div>
 </section>
 
@@ -904,8 +932,23 @@ async function salvaModificaCoppia(){
 
 async function salvaRiproduzione(){
   try{
-    const record={coppia:valore("r_coppia"),nidiata:null,data_deposizione:valore("r_data_deposizione")||null,uova:numero("r_uova"),feconde:numero("r_feconde"),schiuse:numero("r_schiuse"),svezzati:numero("r_svezzati"),data_svezzamento:valore("r_data_svezzamento")||null,stato:valore("r_stato"),note:valore("r_note")};
-    await inserisci("riproduzione",record);pulisciForm("formRiproduzione");nascondiForm("formRiproduzione");await aggiornaRiproduzione();
+    const r={
+      coppia:valore("r_coppia"),
+      data_deposizione:valore("r_data_deposizione")||null,
+      data_ultimo_uovo:valore("r_data_ultimo_uovo")||null,
+      data_schiusa_prevista:valore("r_data_schiusa_prevista")||null,
+      uova:numero("r_uova"),
+      feconde:numero("r_feconde"),
+      schiuse:numero("r_schiuse"),
+      svezzati:numero("r_svezzati"),
+      data_svezzamento:valore("r_data_svezzamento")||null,
+      stato:valore("r_stato"),
+      note:valore("r_note")
+    };
+    await inserisci("riproduzione",r);
+    pulisciForm("formRiproduzione");
+    nascondiForm("formRiproduzione");
+    await aggiornaLista("riproduzione");
   }catch(e){errore(e);}
 }
 async function aggiornaRiproduzione(){
