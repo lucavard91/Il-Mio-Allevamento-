@@ -582,24 +582,22 @@ async function salvaProfiloUtente(){
 
     if(errorLettura)throw errorLettura;
 
-    let data;
-
     if(profiloEsistente){
-      const risultato=await sb
+
+      const {error}=await sb
         .from("profili_utenti")
         .update({
           nome:nome||null,
           cognome:cognome||null,
           rna:rna||null
         })
-        .eq("user_id",u.id)
-        .select()
-        .maybeSingle();
+        .eq("user_id",u.id);
 
-      if(risultato.error)throw risultato.error;
-      data=risultato.data;
+      if(error)throw error;
+
     }else{
-      const risultato=await sb
+
+      const {error}=await sb
         .from("profili_utenti")
         .insert({
           user_id:u.id,
@@ -607,23 +605,16 @@ async function salvaProfiloUtente(){
           nome:nome||null,
           cognome:cognome||null,
           rna:rna||null
-        })
-        .select()
-        .maybeSingle();
+        });
 
-      if(risultato.error)throw risultato.error;
-      data=risultato.data;
+      if(error)throw error;
     }
 
-    if(!data){
-      throw new Error("Il profilo non è stato salvato.");
-    }
-
-    profilo=data;
-
-    if(box){
-      box.textContent="✅ Profilo salvato correttamente.";
-    }
+    profilo.nome=nome||null;
+    profilo.cognome=cognome||null;
+    profilo.rna=rna||null;
+    profilo.user_id=u.id;
+    profilo.email=u.email||profilo.email||null;
 
     const nomeCompleto=[
       profilo.nome,
@@ -649,6 +640,10 @@ async function salvaProfiloUtente(){
       profiloCard.style.display="none";
     }
 
+    if(box){
+      box.textContent="✅ Profilo salvato correttamente.";
+    }
+
   }catch(e){
     console.error(e);
 
@@ -659,7 +654,6 @@ async function salvaProfiloUtente(){
     }
   }
 }
-
 async function inserisci(tabella,record){
   const u=await utenteCorrente();
   record.user_id=u.id;
