@@ -690,7 +690,17 @@ async function mostraApp(){
     if(!accessoValido()&&profilo.ruolo!=="admin"){msg("Il tuo accesso non è attivo o è scaduto.");return;}
     toggle("loginScreen",false);toggle("resetScreen",false);toggle("app",true);
     const u=await utenteCorrente();
-    $("utenteLoggato").textContent="Account: "+(u.email||"utente");
+    const nomeCompleto=[profilo.nome,profilo.cognome]
+  .filter(Boolean)
+  .join(" ")
+  .trim();
+
+const rna=(profilo.rna||"").trim();
+
+$("utenteLoggato").innerHTML=
+  nomeCompleto
+    ? "<b>"+esc(nomeCompleto)+"</b>"+(rna?"<br>RNA: "+esc(rna):"")
+    : "Account: "+esc(u.email||"utente");
     mostraStatoAccount();
     if(profilo.ruolo==="admin"&&!$("adminCard")){
       $("homeGrid").insertAdjacentHTML("beforeend",'<div class="card" id="adminCard"><h2>👑 Amministrazione</h2><p>Gestisci utenti e scadenze.</p><button data-page="admin">Apri amministrazione</button></div>');
