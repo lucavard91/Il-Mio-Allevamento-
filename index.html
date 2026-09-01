@@ -951,22 +951,32 @@ async function salvaRiproduzione(){
     await aggiornaLista("riproduzione");
   }catch(e){errore(e);}
 }
+
 async function aggiornaRiproduzione(){
   try{
     const dati=await leggi("riproduzione"),coppie=await leggi("coppie"),lista=$("listaRiproduzione");
-    if(!dati.length){lista.innerHTML='<div class="card empty">Nessuna riproduzione inserita.</div>';return;}
+    if(!dati.length){
+      lista.innerHTML='<div class="card empty">Nessuna riproduzione inserita.</div>';
+      return;
+    }
     const norm=v=>String(v||"").replace(/\s+/g,"").toLowerCase();
     lista.innerHTML=dati.map(r=>{
       const c=coppie.find(x=>norm(x.codice)===norm(r.coppia));
       return `<div class="item"><h3>🐣 ${esc(r.coppia||r.nidiata||"Riproduzione")}</h3>
-      <p><b>Maschio:</b> ${esc(c?.maschio||"Non registrato")}</p><p><b>Femmina:</b> ${esc(c?.femmina||"Non registrata")}</p>
-      <p><b>Deposizione:</b> ${esc(r.data_deposizione||"-")}</p><p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Svezzati:</b> ${r.svezzati??"-"}</p>
-      <p><b>Data svezzamento:</b> ${esc(r.data_svezzamento||"-")}</p><p><b>Stato:</b> ${esc(r.stato||"-")}</p><p><b>Note:</b> ${esc(r.note||"-")}</p>
+      <p><b>Maschio:</b> ${esc(c?.maschio||"Non registrato")}</p>
+      <p><b>Femmina:</b> ${esc(c?.femmina||"Non registrata")}</p>
+      <p><b>Data deposizione:</b> ${esc(r.data_deposizione||"-")}</p>
+      <p><b>Data ultimo uovo deposto:</b> ${esc(r.data_ultimo_uovo||"-")}</p>
+      <p><b>Schiusa prevista:</b> ${esc(r.data_schiusa_prevista||"-")}</p>
+      <p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Svezzati:</b> ${r.svezzati??"-"}</p>
+      <p><b>Data svezzamento:</b> ${esc(r.data_svezzamento||"-")}</p>
+      <p><b>Stato:</b> ${esc(r.stato||"-")}</p>
+      <p><b>Note:</b> ${esc(r.note||"-")}</p>
       <button class="danger" data-delete-table="riproduzione" data-delete-id="${esc(r.id)}">Elimina</button></div>`;
-    }).join("");bindDeleteButtons();
+    }).join("");
+    bindDeleteButtons();
   }catch(e){errore(e);}
 }
-
 async function salvaGabbia(){
   try{
     const record={numero:valore("g_numero"),posizione:valore("g_posizione"),tipo:valore("g_tipo"),capacita:numero("g_capacita"),capacita_soggetti:numero("g_capacita_soggetti"),coppia_soggetti:valore("g_coppia_soggetti"),stato:valore("g_stato"),note:valore("g_note")};
