@@ -995,23 +995,102 @@ async function aggiornaRiproduzione(){
       lista.innerHTML='<div class="card empty">Nessuna riproduzione inserita.</div>';
       return;
     }
+
     const norm=v=>String(v||"").replace(/\s+/g,"").toLowerCase();
+
     lista.innerHTML=dati.map(r=>{
       const c=coppie.find(x=>norm(x.codice)===norm(r.coppia));
-      return `<div class="item"><h3>🐣 ${esc(r.coppia||r.nidiata||"Riproduzione")}</h3>
-      <p><b>Maschio:</b> ${esc(c?.maschio||"Non registrato")}</p>
-      <p><b>Femmina:</b> ${esc(c?.femmina||"Non registrata")}</p>
-      <p><b>Data deposizione:</b> ${esc(r.data_deposizione||"-")}</p>
-      <p><b>Data ultimo uovo deposto:</b> ${esc(r.data_ultimo_uovo||"-")}</p>
-      <p><b>Schiusa prevista:</b> ${esc(r.data_schiusa_prevista||"-")}</p>
-      <p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Svezzati:</b> ${r.svezzati??"-"}</p>
-      <p><b>Data svezzamento:</b> ${esc(r.data_svezzamento||"-")}</p>
-      <p><b>Stato:</b> ${esc(r.stato||"-")}</p>
-      <p><b>Note:</b> ${esc(r.note||"-")}</p>
-      <button class="danger" data-delete-table="riproduzione" data-delete-id="${esc(r.id)}">Elimina</button></div>`;
+
+      return `<div class="item">
+        <h3>🐣 ${esc(r.coppia||r.nidiata||"Riproduzione")}</h3>
+        <p><b>Maschio:</b> ${esc(c?.maschio||"Non registrato")}</p>
+        <p><b>Femmina:</b> ${esc(c?.femmina||"Non registrata")}</p>
+        <p><b>Data deposizione:</b> ${esc(r.data_deposizione||"-")}</p>
+        <p><b>Data ultimo uovo deposto:</b> ${esc(r.data_ultimo_uovo||"-")}</p>
+        <p><b>Schiusa prevista:</b> ${esc(r.data_schiusa_prevista||"-")}</p>
+        <p><b>Uova:</b> ${r.uova??"-"} &nbsp; <b>Feconde:</b> ${r.feconde??"-"} &nbsp; <b>Schiuse:</b> ${r.schiuse??"-"} &nbsp; <b>Svezzati:</b> ${r.svezzati??"-"}</p>
+        <p><b>Data svezzamento:</b> ${esc(r.data_svezzamento||"-")}</p>
+        <p><b>Stato:</b> ${esc(r.stato||"-")}</p>
+        <p><b>Note:</b> ${esc(r.note||"-")}</p>
+
+        <button class="secondary" onclick="modificaRiproduzione('${esc(r.id)}')">✏️ Modifica</button>
+        <button class="danger" data-delete-table="riproduzione" data-delete-id="${esc(r.id)}">🗑️ Elimina</button>
+      </div>`;
     }).join("");
+
     bindDeleteButtons();
-  }catch(e){errore(e);}
+  }catch(e){
+    errore(e);
+  }
+}
+
+async function modificaRiproduzione(id){
+  try{
+    const r=(await leggi("riproduzione")).find(x=>String(x.id)===String(id));
+    if(!r){
+      alert("Riproduzione non trovata.");
+      return;
+    }
+
+    $("r_coppia").value=r.coppia||"";
+    $("r_data_deposizione").value=r.data_deposizione||"";
+    $("r_data_ultimo_uovo").value=r.data_ultimo_uovo||"";
+    $("r_data_schiusa_prevista").value=r.data_schiusa_prevista||"";
+    $("r_uova").value=r.uova??"";
+    $("r_feconde").value=r.feconde??"";
+    $("r_schiuse").value=r.schiuse??"";
+    $("r_svezzati").value=r.svezzati??"";
+    $("r_data_svezzamento").value=r.data_svezzamento||"";
+    $("r_stato").value=r.stato||"";
+    $("r_note").value=r.note||"";
+
+    $("formRiproduzione").dataset.modificaId=id;
+    mostraForm("formRiproduzione");
+    $("saveRiproduzione").textContent="💾 Salva modifica";
+    $("saveRiproduzione").onclick=salvaModificaRiproduzione;
+  }catch(e){
+    errore(e);
+  }
+}
+
+async function salvaModificaRiproduzione(){
+  try{
+    const id=$("formRiproduzione").dataset.modificaId;
+
+    if(!id){
+      alert("Nessuna riproduzione selezionata.");
+      return;
+    }
+
+    const record={
+      coppia:valore("r_coppia"),
+      data_deposizione:valore("r_data_deposizione")||null,
+      data_ultimo_uovo:valore("r_data_ultimo_uovo")||null,
+      data_schiusa_prevista:valore("r_data_schiusa_prevista")||null,
+      uova:numero("r_uova"),
+      feconde:numero("r_feconde"),
+      schiuse:numero("r_schiuse"),
+      svezzati:numero("r_svezzati"),
+      data_svezzamento:valore("r_data_svezzamento")||null,
+      stato:valore("r_stato"),
+      note:valore("r_note")
+    };
+
+    const {error}=await sb.from("riproduzione").update(record).eq("id",id);
+    if(error)throw error;
+
+    delete $("formRiproduzione").dataset.modificaId;
+    pulisciForm("formRiproduzione");
+    nascondiForm("formRiproduzione");
+    $("saveRiproduzione").textContent="Salva";
+    $("saveRiproduzione").onclick=salvaRiproduzione;
+
+    await aggiornaRiproduzione();
+
+    alert("Riproduzione modificata correttamente.");
+  }catch(e){
+    errore(e);
+  }
 }
 async function salvaGabbia(){
   try{
