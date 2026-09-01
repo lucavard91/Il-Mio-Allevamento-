@@ -556,7 +556,7 @@ async function caricaProfilo(){
   profilo=data;
   return data;
 }
- async function salvaProfiloUtente(){
+async function salvaProfiloUtente(){
   const nome=$("profiloNome")?.value.trim()||"";
   const cognome=$("profiloCognome")?.value.trim()||"";
   const rna=$("profiloRNA")?.value.trim()||"";
@@ -574,18 +574,50 @@ async function caricaProfilo(){
       box.textContent="Salvataggio in corso...";
     }
 
-    const {data,error}=await sb
+    const {data:profiloEsistente,error:errorLettura}=await sb
       .from("profili_utenti")
-      .update({
-        nome:nome||null,
-        cognome:cognome||null,
-        rna:rna||null
-      })
+      .select("user_id")
       .eq("user_id",u.id)
-      .select()
-      .single();
+      .maybeSingle();
 
-    if(error)throw error;
+    if(errorLettura)throw errorLettura;
+
+    let data;
+
+    if(profiloEsistente){
+      const risultato=await sb
+        .from("profili_utenti")
+        .update({
+          nome:nome||null,
+          cognome:cognome||null,
+          rna:rna||null
+        })
+        .eq("user_id",u.id)
+        .select()
+        .maybeSingle();
+
+      if(risultato.error)throw risultato.error;
+      data=risultato.data;
+    }else{
+      const risultato=await sb
+        .from("profili_utenti")
+        .insert({
+          user_id:u.id,
+          email:u.email||null,
+          nome:nome||null,
+          cognome:cognome||null,
+          rna:rna||null
+        })
+        .select()
+        .maybeSingle();
+
+      if(risultato.error)throw risultato.error;
+      data=risultato.data;
+    }
+
+    if(!data){
+      throw new Error("Il profilo non è stato salvato.");
+    }
 
     profilo=data;
 
@@ -593,18 +625,29 @@ async function caricaProfilo(){
       box.textContent="✅ Profilo salvato correttamente.";
     }
 
-    const nomeCompleto=[profilo.nome,profilo.cognome]
-      .filter(Boolean)
-      .join(" ")
-      .trim();
+    const nomeCompleto=[
+      profilo.nome,
+      profilo.cognome
+    ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+    const rnaSalvato=(profilo.rna||"").trim();
 
     $("utenteLoggato").innerHTML=
       nomeCompleto
         ? "<b>"+esc(nomeCompleto)+"</b>"+
-          (profilo.rna
-            ? "<br>RNA: "+esc(profilo.rna)
+          (rnaSalvato
+            ? "<br>RNA: "+esc(rnaSalvato)
             : "")
         : "Account: "+esc(u.email||"utente");
+
+    const profiloCard=$("profiloNome")?.closest(".card");
+
+    if(profiloCard){
+      profiloCard.style.display="none";
+    }
 
   }catch(e){
     console.error(e);
@@ -616,6 +659,7 @@ async function caricaProfilo(){
     }
   }
 }
+
 async function inserisci(tabella,record){
   const u=await utenteCorrente();
   record.user_id=u.id;
