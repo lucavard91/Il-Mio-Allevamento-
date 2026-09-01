@@ -369,14 +369,48 @@ label{font-weight:bold}
 
 
 <section id="calendario" class="hidden">
-  <div class="page-title"><h2>📅 Calendario</h2><button id="newCalendario">+ Nuovo evento</button></div>
-  <button class="secondary back" data-page="home">← Torna alla schermata principale</button>
-  <div id="formCalendario" class="card hidden">
-    <label>Data</label><input id="cal_data" type="date"><label>Evento</label><input id="cal_evento" placeholder="Es. Controllo nido">
-    <label>Categoria</label><input id="cal_categoria"><label>Coppia / soggetto</label><input id="cal_coppia_soggetto">
-    <label>Stato</label><input id="cal_stato"><label>Note</label><textarea id="cal_note"></textarea>
-    <button id="saveCalendario" class="success">Salva evento</button><button id="cancelCalendario" class="secondary">Annulla</button>
+  <div class="page-title">
+    <h2>📅 Calendario</h2>
+    <button id="newCalendario">+ Nuovo evento</button>
   </div>
+
+  <button class="secondary back" data-page="home">← Torna alla schermata principale</button>
+
+  <div class="card">
+    <div class="page-title">
+      <button id="mesePrecedente" class="secondary">←</button>
+      <h3 id="titoloMeseCalendario"></h3>
+      <button id="meseSuccessivo" class="secondary">→</button>
+    </div>
+
+    <div id="calendarioMensile"></div>
+  </div>
+
+  <div id="formCalendario" class="card hidden">
+    <h3>Nuovo evento</h3>
+
+    <label>Data</label>
+    <input id="cal_data" type="date">
+
+    <label>Evento</label>
+    <input id="cal_evento" placeholder="Es. Controllo nido">
+
+    <label>Categoria</label>
+    <input id="cal_categoria">
+
+    <label>Coppia / soggetto</label>
+    <input id="cal_coppia_soggetto">
+
+    <label>Stato</label>
+    <input id="cal_stato">
+
+    <label>Note</label>
+    <textarea id="cal_note"></textarea>
+
+    <button id="saveCalendario" class="success">Salva evento</button>
+    <button id="cancelCalendario" class="secondary">Annulla</button>
+  </div>
+
   <div id="listaCalendario"></div>
 </section>
 
@@ -1011,7 +1045,112 @@ async function salvaAlimentazione(){
 
 
 async function salvaCalendario(){
- try{const r={data:valore("cal_data")||null,evento:valore("cal_evento"),categoria:valore("cal_categoria"),coppia_soggetto:valore("cal_coppia_soggetto"),stato:valore("cal_stato"),note:valore("cal_note")};await inserisci("calendario",r);pulisciForm("formCalendario");nascondiForm("formCalendario");await aggiornaLista("calendario");}catch(e){errore(e);}
+  try{
+    const r={
+      data:valore("cal_data")||null,
+      evento:valore("cal_evento"),
+      categoria:valore("cal_categoria"),
+      coppia_soggetto:valore("cal_coppia_soggetto"),
+      stato:valore("cal_stato"),
+      note:valore("cal_note")
+    };
+
+    await inserisci("calendario",r);
+    pulisciForm("formCalendario");
+    nascondiForm("formCalendario");
+    await mostraCalendarioMensile();
+  }catch(e){
+    errore(e);
+  }
+}
+
+let meseCalendario=new Date();
+
+async function mostraCalendarioMensile(){
+  try{
+    const box=$("calendarioMensile");
+    const titolo=$("titoloMeseCalendario");
+    if(!box||!titolo)return;
+
+    const anno=meseCalendario.getFullYear();
+    const mese=meseCalendario.getMonth();
+
+    const nomiMesi=[
+      "Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
+      "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"
+    ];
+
+    titolo.textContent=`${nomiMesi[mese]} ${anno}`;
+
+    const eventi=await leggi("calendario");
+    const riproduzioni=await leggi("riproduzione");
+
+    const giorniTotali=new Date(anno,mese+1,0).getDate();
+    const primoGiorno=(new Date(anno,mese,1).getDay()+6)%7;
+
+    const giorniSettimana=[
+      "Lun","Mar","Mer","Gio","Ven","Sab","Dom"
+    ];
+
+    let html=`
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">
+        ${giorniSettimana.map(g=>`<div style="text-align:center;font-weight:bold;padding:6px;">${g}</div>`).join("")}
+    `;
+
+    for(let i=0;i<primoGiorno;i++){
+      html+=`<div></div>`;
+    }
+
+    for(let giorno=1;giorno<=giorniTotali;giorno++){
+      const data=`${anno}-${String(mese+1).padStart(2,"0")}-${String(giorno).padStart(2,"0")}`;
+
+      const eventiGiorno=eventi.filter(e=>e.data===data);
+
+      const eventiRiproduzione=[];
+
+      riproduzioni.forEach(r=>{
+        if(r.data_schiusa_prevista===data){
+          eventiRiproduzione.push(
+            `<div>🐣 <b>Schiusa prevista</b><br>${esc(r.coppia||"-")}</div>`
+          );
+        }
+
+        if(r.data_ultimo_uovo){
+          const d=new Date(r.data_ultimo_uovo+"T00:00:00");
+          d.setDate(d.getDate()+7);
+
+          const speratura=
+            `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+
+          if(speratura===data){
+            eventiRiproduzione.push(
+              `<div>🔎 <b>Speratura</b><br>${esc(r.coppia||"-")}</div>`
+            );
+          }
+        }
+      });
+
+      const contenuto=[
+        ...eventiRiproduzione,
+        ...eventiGiorno.map(e=>
+          `<div>📌 <b>${esc(e.evento||"Evento")}</b><br>${esc(e.coppia_soggetto||"")}</div>`
+        )
+      ].join("");
+
+      html+=`
+        <div style="min-height:80px;border:1px solid #ddd;border-radius:8px;padding:5px;">
+          <div style="font-weight:bold;">${giorno}</div>
+          ${contenuto}
+        </div>
+      `;
+    }
+
+    html+=`</div>`;
+    box.innerHTML=html;
+
+  }catch(e){
+    errore(e);
+  }
 }
 async function salvaSalute(){
  try{const r={soggetto:valore("sal_soggetto"),data:valore("sal_data")||null,tipo:valore("sal_tipo"),peso:numero("sal_peso"),trattamento:valore("sal_trattamento"),scadenza:valore("sal_scadenza")||null,note:valore("sal_note")};await inserisci("salute",r);pulisciForm("formSalute");nascondiForm("formSalute");await aggiornaLista("salute");}catch(e){errore(e);}
@@ -1394,7 +1533,7 @@ function bindUI(){
  $("newRiproduzione").onclick=()=>{mostraForm("formRiproduzione");};$("cancelRiproduzione").onclick=()=>nascondiForm("formRiproduzione");$("saveRiproduzione").onclick=salvaRiproduzione;aggiornaRiproduzione();
  $("newGabbia").onclick=()=>mostraForm("formGabbia");$("cancelGabbia").onclick=()=>nascondiForm("formGabbia");$("saveGabbia").onclick=salvaGabbia;
  $("newAlimentazione").onclick=()=>mostraForm("formAlimentazione");$("cancelAlimentazione").onclick=()=>nascondiForm("formAlimentazione");$("saveAlimentazione").onclick=salvaAlimentazione;
- $("newCalendario").onclick=()=>mostraForm("formCalendario");$("cancelCalendario").onclick=()=>nascondiForm("formCalendario");$("saveCalendario").onclick=salvaCalendario;
+ $("newCalendario").onclick=()=>mostraForm("formCalendario");$("cancelCalendario").onclick=()=>nascondiForm("formCalendario");$("saveCalendario").onclick=salvaCalendario;$("mesePrecedente").onclick=()=>{meseCalendario.setMonth(meseCalendario.getMonth()-1);mostraCalendarioMensile();};$("meseSuccessivo").onclick=()=>{meseCalendario.setMonth(meseCalendario.getMonth()+1);mostraCalendarioMensile();};mostraCalendarioMensile();
  $("newSalute").onclick=()=>mostraForm("formSalute");$("cancelSalute").onclick=()=>nascondiForm("formSalute");$("saveSalute").onclick=salvaSalute;
  $("cercaGenealogia").oninput=mostraGenealogia;
   $("caricaStandardFOI").onclick=()=>caricaCriteriFOI($("foiRazza").value);
