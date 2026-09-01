@@ -161,7 +161,7 @@ label{font-weight:bold}
     <div class="card"><h2>🌳 Genealogia</h2><p>Visualizza genitori e discendenza.</p><button data-page="genealogia">Apri Genealogia</button></div>
     <div class="card"><h2>🏠 Gabbie</h2><p>Gestisci le gabbie dell'allevamento.</p><button data-page="gabbie">Apri Gabbie</button></div>
     <div class="card"><h2>🌾 Alimentazione</h2><p>Gestisci alimentazione e programmi.</p><button data-page="alimentazione">Apri Alimentazione</button></div>
-    <div class="card"><h2>💍 Anellini</h2><p>Gestisci gli anellini dei soggetti.</p><button data-page="anellini">Apri Anellini</button></div>
+    
     <div class="card"><h2>📅 Calendario</h2><p>Gestisci gli eventi dell'allevamento.</p><button data-page="calendario">Apri Calendario</button></div>
     <div class="card"><h2>❤️ Salute</h2><p>Gestisci controlli e note sulla salute.</p><button data-page="salute">Apri Salute</button></div>
     <div class="card"><h2>🏆 Standard FOI</h2><p>Consulta i criteri FOI disponibili nell'app.</p><button data-page="standardFOI">Apri Standard FOI</button></div>
@@ -339,18 +339,6 @@ label{font-weight:bold}
   <div id="listaAlimentazione"></div>
 </section>
 
-<section id="anellini" class="hidden">
-  <div class="page-title"><h2>💍 Anellini</h2><button id="newAnellino">+ Nuovo anellino</button></div>
-  <button class="secondary back" data-page="home">← Torna alla schermata principale</button>
-  <div id="formAnellino" class="card hidden">
-    <label>Anno</label><input id="an_anno" type="number"><label>Numero</label><input id="an_numero"><label>Colore</label><input id="an_colore">
-    <label>Misura</label><input id="an_misura"><label>Tipo</label><input id="an_tipo"><label>Oggetto</label><input id="an_oggetto">
-    <label>Stato</label><select id="an_stato"><option>Disponibile</option><option>Assegnato</option><option>Utilizzato</option></select>
-    <label>Note</label><textarea id="an_note"></textarea>
-    <button id="saveAnellino" class="success">Salva anellino</button><button id="cancelAnellino" class="secondary">Annulla</button>
-  </div>
-  <div id="listaAnellini"></div>
-</section>
 
 <section id="calendario" class="hidden">
   <div class="page-title"><h2>📅 Calendario</h2><button id="newCalendario">+ Nuovo evento</button></div>
@@ -391,7 +379,7 @@ label{font-weight:bold}
 const SUPABASE_URL="https://mddsmqwfufzebahemxcn.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kZHNtcXdmdWZ6ZWJhaGVteGNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzOTMyMTksImV4cCI6MjEwMTk2OTIxOX0.UXzR227VZ1EBwq4fuGapZQen3ekGvGIzezfvJZbXojY";
 
-const sezioni=["home","soggetti","coppie","riproduzione","genealogia","gabbie","alimentazione","anellini","calendario","salute","admin","standardFOI","aiValutazione"];
+const sezioni=["home","soggetti","coppie","riproduzione","genealogia","gabbie","alimentazione","calendario","salute","admin","standardFOI","aiValutazione"];
 let sb=null;
 let profilo=null;
 let soggettiCache=[];
@@ -966,9 +954,7 @@ async function salvaAlimentazione(){
   try{const r={data:valore("a_data")||null,alimento:valore("a_alimento"),specie_fase:valore("a_fase"),quantita:numero("a_quantita"),unita:valore("a_unita"),frequenza:valore("a_frequenza"),note:valore("a_note")};await inserisci("alimentazione",r);pulisciForm("formAlimentazione");nascondiForm("formAlimentazione");await aggiornaLista("alimentazione");}catch(e){errore(e);}
 }
 
-async function salvaAnellino(){
- try{const r={anno:numero("an_anno"),numero:valore("an_numero"),colore:valore("an_colore"),misura:valore("an_misura"),tipo:valore("an_tipo"),soggetto:valore("an_oggetto"),stato:valore("an_stato"),note:valore("an_note")};await inserisci("anellini",r);pulisciForm("formAnellino");nascondiForm("formAnellino");await aggiornaLista("anellini");}catch(e){errore(e);}
-}
+
 async function salvaCalendario(){
  try{const r={data:valore("cal_data")||null,evento:valore("cal_evento"),categoria:valore("cal_categoria"),coppia_soggetto:valore("cal_coppia_soggetto"),stato:valore("cal_stato"),note:valore("cal_note")};await inserisci("calendario",r);pulisciForm("formCalendario");nascondiForm("formCalendario");await aggiornaLista("calendario");}catch(e){errore(e);}
 }
@@ -1353,7 +1339,6 @@ function bindUI(){
  $("newRiproduzione").onclick=()=>mostraForm("formRiproduzione");$("cancelRiproduzione").onclick=()=>nascondiForm("formRiproduzione");$("saveRiproduzione").onclick=salvaRiproduzione;
  $("newGabbia").onclick=()=>mostraForm("formGabbia");$("cancelGabbia").onclick=()=>nascondiForm("formGabbia");$("saveGabbia").onclick=salvaGabbia;
  $("newAlimentazione").onclick=()=>mostraForm("formAlimentazione");$("cancelAlimentazione").onclick=()=>nascondiForm("formAlimentazione");$("saveAlimentazione").onclick=salvaAlimentazione;
- $("newAnellino").onclick=()=>mostraForm("formAnellino");$("cancelAnellino").onclick=()=>nascondiForm("formAnellino");$("saveAnellino").onclick=salvaAnellino;
  $("newCalendario").onclick=()=>mostraForm("formCalendario");$("cancelCalendario").onclick=()=>nascondiForm("formCalendario");$("saveCalendario").onclick=salvaCalendario;
  $("newSalute").onclick=()=>mostraForm("formSalute");$("cancelSalute").onclick=()=>nascondiForm("formSalute");$("saveSalute").onclick=salvaSalute;
  $("cercaGenealogia").oninput=mostraGenealogia;
