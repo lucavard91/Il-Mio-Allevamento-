@@ -720,27 +720,173 @@ async function caricaFotoDaScheda(id){
 async function apriValutazioneAI(id){
   const dati=await leggi("soggetti");
   const s=dati.find(x=>String(x.id)===String(id));
-  if(!s){alert("Soggetto non trovato.");return;}
-  nascondiTutto();toggle("aiValutazione",true);
+
+  if(!s){
+    alert("Soggetto non trovato.");
+    return;
+  }
+
+  nascondiTutto();
+  toggle("aiValutazione",true);
+
   const root=$("aiValutazioneRoot");
-  const foto=s.foto_url?`<img src="${esc(s.foto_url)}" alt="Foto soggetto" class="ai-foto">`:`<div class="ai-foto-placeholder">📷 Nessuna foto disponibile</div>`;
-  root.innerHTML=`<div class="card"><h3>🐦 ${esc((s.anno||"")+" / "+(s.numero||""))}</h3><p><b>Sesso:</b> ${esc(s.sesso||"-")} · <b>Razza:</b> ${esc(s.razza||"-")} · <b>Mutazione:</b> ${esc(s.mutazione||"-")}</p>${foto}<div class="card ai-guide"><h3>📸 Prima della valutazione</h3><p>Per ottenere un'analisi più affidabile, usa una fotografia nitida e completa del soggetto, laterale, in posizione naturale e con testa, corpo, zampe e coda visibili.</p><div style="display:flex;justify-content:center;margin:12px 0"><svg width="280" height="150" viewBox="0 0 280 150" role="img" aria-label="Esempio schematico di posizione fotografica del canarino"><rect x="5" y="5" width="270" height="140" rx="14" fill="#eef2f7" stroke="#cbd5e1"/><ellipse cx="138" cy="82" rx="58" ry="35" fill="#d1d5db" stroke="#64748b"/><circle cx="86" cy="72" r="24" fill="#d1d5db" stroke="#64748b"/><path d="M80 96 L65 128 M102 105 L92 132 M190 72 L238 54" stroke="#64748b" stroke-width="6" stroke-linecap="round"/><circle cx="79" cy="67" r="3" fill="#111827"/><path d="M63 78 L50 82" stroke="#64748b" stroke-width="4" stroke-linecap="round"/><text x="140" y="25" text-anchor="middle" font-size="12" fill="#334155">Vista laterale · soggetto intero</text></svg></div><button class="secondary" type="button" onclick="mostraGuidaFoto()">📖 Mostra guida fotografica</button></div><div id="aiResult" class="card"><p class="small">La valutazione AI usa i criteri FOI disponibili per la razza. Il motore AI deve essere collegato a un endpoint sicuro lato server; non inseriamo chiavi segrete nel file HTML.</p><button class="success" type="button" onclick="eseguiValutazioneAI(${JSON.stringify(String(id))})">🤖 Valuta con AI</button><button class="secondary" type="button" onclick="caricaFotoDaScheda(${JSON.stringify(String(id))})">📷 Carica/Sostituisci foto</button></div></div>`;
+
+  const foto=s.foto_url
+    ? `<img src="${esc(s.foto_url)}" alt="Foto soggetto" class="ai-foto">`
+    : `<div class="ai-foto-placeholder">📷 Nessuna foto disponibile</div>`;
+
+  root.innerHTML=`
+    <div class="card">
+
+      <h3>🐦 ${esc((s.anno||"")+" / "+(s.numero||""))}</h3>
+
+      <p>
+        <b>Sesso:</b> ${esc(s.sesso||"-")}
+        ·
+        <b>Razza:</b> ${esc(s.razza||"-")}
+        ·
+        <b>Mutazione:</b> ${esc(s.mutazione||"-")}
+      </p>
+
+      ${foto}
+
+      <div class="card ai-guide">
+
+        <h3>📸 Prima della valutazione</h3>
+
+        <p>
+          Per ottenere un'analisi più affidabile, usa una fotografia
+          nitida e completa del soggetto, laterale, in posizione naturale
+          e con testa, corpo, zampe e coda visibili.
+        </p>
+
+        <div style="display:flex;justify-content:center;margin:12px 0">
+
+          <svg width="280" height="150" viewBox="0 0 280 150"
+            role="img"
+            aria-label="Esempio schematico di posizione fotografica del canarino">
+
+            <rect x="5" y="5" width="270" height="140"
+              rx="14"
+              fill="#eef2f7"
+              stroke="#cbd5e1"/>
+
+            <ellipse cx="138" cy="82" rx="58" ry="35"
+              fill="#d1d5db"
+              stroke="#64748b"/>
+
+            <circle cx="86" cy="72" r="24"
+              fill="#d1d5db"
+              stroke="#64748b"/>
+
+            <path d="M80 96 L65 128 M102 105 L92 132 M190 72 L238 54"
+              stroke="#64748b"
+              stroke-width="6"
+              stroke-linecap="round"/>
+
+            <circle cx="79" cy="67" r="3"
+              fill="#111827"/>
+
+            <path d="M63 78 L50 82"
+              stroke="#64748b"
+              stroke-width="4"
+              stroke-linecap="round"/>
+
+            <text x="140" y="25"
+              text-anchor="middle"
+              font-size="12"
+              fill="#334155">
+              Vista laterale · soggetto intero
+            </text>
+
+          </svg>
+
+        </div>
+
+        <button id="btnMostraGuidaFoto"
+          class="secondary"
+          type="button">
+          📖 Mostra guida fotografica
+        </button>
+
+      </div>
+
+      <div id="aiResult" class="card">
+
+        <p class="small">
+          La valutazione AI usa i criteri FOI disponibili per la razza.
+          Il motore AI deve essere collegato a un endpoint sicuro lato server;
+          non inseriamo chiavi segrete nel file index.html.
+        </p>
+
+        <button id="btnEseguiValutazioneAI"
+          class="success"
+          type="button">
+          🤖 Valuta con AI
+        </button>
+
+        <button id="btnCaricaFotoAI"
+          class="secondary"
+          type="button">
+          📷 Carica/Sostituisci foto
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  const btnAI=$("btnEseguiValutazioneAI");
+  const btnFoto=$("btnCaricaFotoAI");
+  const btnGuida=$("btnMostraGuidaFoto");
+
+  if(btnAI){
+    btnAI.addEventListener("click",function(){
+      eseguiValutazioneAI(String(id));
+    });
+  }
+
+  if(btnFoto){
+    btnFoto.addEventListener("click",function(){
+      caricaFotoDaScheda(String(id));
+    });
+  }
+
+  if(btnGuida){
+    btnGuida.addEventListener("click",function(){
+      mostraGuidaFoto();
+    });
+  }
 }
 
+
 function mostraGuidaFoto(){
-  alert("📸 FOTO GUIDA\n\nFotografa il canarino interamente visibile, nitido, di profilo/posizione prevista dallo standard, senza ostacoli e con luce uniforme. La guida illustrata definitiva verrà inserita nella versione grafica dell'app.");
+  alert(
+    "📸 FOTO GUIDA\n\n"+
+    "Fotografa il canarino interamente visibile, nitido, "+
+    "di profilo/posizione prevista dallo standard, senza ostacoli "+
+    "e con luce uniforme."
+  );
 }
+
 
 async function eseguiValutazioneAI(id){
   const endpoint=(window.MYAGARI_AI_ENDPOINT||"").trim();
 
   if(!endpoint){
-    alert("La schermata AI è pronta, ma il motore AI non è ancora collegato. Per sicurezza il collegamento dovrà avvenire tramite un servizio server-side, senza chiavi API nel file index.html.");
+    alert(
+      "La schermata AI è pronta, ma il motore AI non è ancora collegato. "+
+      "Per sicurezza il collegamento dovrà avvenire tramite un servizio "+
+      "server-side, senza chiavi API nel file index.html."
+    );
     return;
   }
 
   const root=$("aiResult");
-  if(root) root.innerHTML='<p>🤖 Analisi in corso…</p>';
+
+  if(root){
+    root.innerHTML='<p>🤖 Analisi in corso…</p>';
+  }
 
   try{
     const dati=await leggi("soggetti");
@@ -769,23 +915,42 @@ async function eseguiValutazioneAI(id){
     });
 
     if(!res.ok){
-      throw new Error("Servizio AI non disponibile (HTTP "+res.status+")");
+      throw new Error(
+        "Servizio AI non disponibile (HTTP "+res.status+")"
+      );
     }
 
     const result=await res.json();
 
-    const score=Number(result.punteggio??result.score);
+    const score=Number(
+      result.punteggio??result.score
+    );
 
-    const puntiForza=result.punti_forza||result.strengths||[];
-    const daMigliorare=result.da_migliorare||result.improvements||[];
-    const analisi=result.analisi||result.analysis||"";
+    const puntiForza=
+      result.punti_forza||
+      result.strengths||
+      [];
+
+    const daMigliorare=
+      result.da_migliorare||
+      result.improvements||
+      [];
+
+    const analisi=
+      result.analisi||
+      result.analysis||
+      "";
 
     const record={
       user_id:u.id,
       soggetto_id:id,
       punteggio:Number.isFinite(score)?score:null,
-      punti_forza:Array.isArray(puntiForza)?puntiForza:[],
-      da_migliorare:Array.isArray(daMigliorare)?daMigliorare:[],
+      punti_forza:Array.isArray(puntiForza)
+        ? puntiForza
+        : [],
+      da_migliorare:Array.isArray(daMigliorare)
+        ? daMigliorare
+        : [],
       analisi:String(analisi||"")
     };
 
@@ -800,9 +965,105 @@ async function eseguiValutazioneAI(id){
     renderRisultatoAI(id,result);
 
   }catch(e){
+
     if(root){
-      root.innerHTML='<div class="error">Errore valutazione AI: '+esc(e.message||e)+'</div>';
+      root.innerHTML=
+        '<div class="error">'+
+        'Errore valutazione AI: '+
+        esc(e.message||e)+
+        '</div>';
     }
+
+    console.error(e);
+  }
+}
+
+
+function renderRisultatoAI(id,r){
+
+  const root=$("aiResult");
+
+  if(!root)return;
+
+  const score=Number(
+    r.punteggio??r.score
+  );
+
+  const puntiForza=
+    r.punti_forza||
+    r.strengths||
+    [];
+
+  const daMigliorare=
+    r.da_migliorare||
+    r.improvements||
+    [];
+
+  if(Number.isFinite(score)){
+
+    const scores=JSON.parse(
+      localStorage.getItem("myagari_ai_scores")||"{}"
+    );
+
+    scores[String(id)]={
+      score:score,
+      updated_at:new Date().toISOString()
+    };
+
+    localStorage.setItem(
+      "myagari_ai_scores",
+      JSON.stringify(scores)
+    );
+  }
+
+  root.innerHTML=`
+
+    <h3>📊 Valutazione AI</h3>
+
+    <div class="ai-punteggio">
+      ${Number.isFinite(score)
+        ? score.toFixed(1)
+        : "—"} / 100
+    </div>
+
+    <p><b>Punti di forza</b></p>
+
+    <ul>
+      ${
+        (Array.isArray(puntiForza)
+          ? puntiForza
+          : []
+        )
+        .map(x=>`<li>${esc(x)}</li>`)
+        .join("")
+        ||
+        "<li>Non disponibili</li>"
+      }
+    </ul>
+
+    <p><b>Da migliorare</b></p>
+
+    <ul>
+      ${
+        (Array.isArray(daMigliorare)
+          ? daMigliorare
+          : []
+        )
+        .map(x=>`<li>${esc(x)}</li>`)
+        .join("")
+        ||
+        "<li>Non disponibili</li>"
+      }
+    </ul>
+
+    <p class="small">
+      Il risultato mostrato è un'analisi assistita e non sostituisce
+      il giudizio ufficiale di un giudice FOI.
+      La valutazione è stata salvata nell'archivio dell'allevamento.
+    </p>
+
+  `;
+}
 
     console.error(e);
   }
