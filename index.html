@@ -731,6 +731,11 @@ async function apriValutazioneAI(id){
 
   const root=$("aiValutazioneRoot");
 
+  if(!root){
+    alert("Errore: schermata valutazione AI non trovata.");
+    return;
+  }
+
   const foto=s.foto_url
     ? `<img src="${esc(s.foto_url)}" alt="Foto soggetto" class="ai-foto">`
     : `<div class="ai-foto-placeholder">📷 Nessuna foto disponibile</div>`;
@@ -1064,74 +1069,6 @@ function renderRisultatoAI(id,r){
 
   `;
 }
-
-    console.error(e);
-  }
-}
-
-
-function renderRisultatoAI(id,r){
-  const root=$("aiResult");
-  if(!root)return;
-
-  const score=Number(r.punteggio??r.score);
-
-  const puntiForza=r.punti_forza||r.strengths||[];
-  const daMigliorare=r.da_migliorare||r.improvements||[];
-
-  if(Number.isFinite(score)){
-    const scores=JSON.parse(
-      localStorage.getItem("myagari_ai_scores")||"{}"
-    );
-
-    scores[String(id)]={
-      score,
-      updated_at:new Date().toISOString()
-    };
-
-    localStorage.setItem(
-      "myagari_ai_scores",
-      JSON.stringify(scores)
-    );
-  }
-
-  root.innerHTML=`
-    <h3>📊 Valutazione AI</h3>
-
-    <div class="ai-punteggio">
-      ${Number.isFinite(score)?score.toFixed(1):"—"} / 100
-    </div>
-
-    <p><b>Punti di forza</b></p>
-
-    <ul>
-      ${
-        (Array.isArray(puntiForza)?puntiForza:[])
-        .map(x=>`<li>${esc(x)}</li>`)
-        .join("")
-        || "<li>Non disponibili</li>"
-      }
-    </ul>
-
-    <p><b>Da migliorare</b></p>
-
-    <ul>
-      ${
-        (Array.isArray(daMigliorare)?daMigliorare:[])
-        .map(x=>`<li>${esc(x)}</li>`)
-        .join("")
-        || "<li>Non disponibili</li>"
-      }
-    </ul>
-
-    <p class="small">
-      Il risultato mostrato è un'analisi assistita e non sostituisce
-      il giudizio ufficiale di un giudice FOI.
-      La valutazione è stata salvata nell'archivio dell'allevamento.
-    </p>
-  `;
-}
-
 async function salvaSoggetto(){
   try{
     const file=$("s_foto_file")?.files?.[0]||null;
