@@ -1391,7 +1391,7 @@ function bindUI(){
  $("newSoggetto").onclick=()=>mostraForm("formSoggetto");$("cancelSoggetto").onclick=()=>nascondiForm("formSoggetto");$("saveSoggetto").onclick=salvaSoggetto;
  $("searchSoggetto").onclick=cercaSoggetto;$("allSoggetti").onclick=mostraTuttiSoggetti;
  $("newCoppia").onclick=()=>{$("saveCoppia").textContent="Salva coppia";$("saveCoppia").onclick=salvaCoppia;mostraForm("formCoppia");};$("cancelCoppia").onclick=()=>nascondiForm("formCoppia");
- $("newRiproduzione").onclick=()=>mostraForm("formRiproduzione");$("cancelRiproduzione").onclick=()=>nascondiForm("formRiproduzione");$("saveRiproduzione").onclick=salvaRiproduzione;
+ $("newRiproduzione").onclick=()=>{mostraForm("formRiproduzione");};$("cancelRiproduzione").onclick=()=>nascondiForm("formRiproduzione");$("saveRiproduzione").onclick=salvaRiproduzione;aggiornaRiproduzione();
  $("newGabbia").onclick=()=>mostraForm("formGabbia");$("cancelGabbia").onclick=()=>nascondiForm("formGabbia");$("saveGabbia").onclick=salvaGabbia;
  $("newAlimentazione").onclick=()=>mostraForm("formAlimentazione");$("cancelAlimentazione").onclick=()=>nascondiForm("formAlimentazione");$("saveAlimentazione").onclick=salvaAlimentazione;
  $("newCalendario").onclick=()=>mostraForm("formCalendario");$("cancelCalendario").onclick=()=>nascondiForm("formCalendario");$("saveCalendario").onclick=salvaCalendario;
