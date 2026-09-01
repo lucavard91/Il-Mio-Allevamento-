@@ -945,13 +945,15 @@ async function salvaRiproduzione(){
       stato:valore("r_stato"),
       note:valore("r_note")
     };
+
     await inserisci("riproduzione",r);
     pulisciForm("formRiproduzione");
     nascondiForm("formRiproduzione");
-    await aggiornaLista("riproduzione");
-  }catch(e){errore(e);}
+    await aggiornaRiproduzione();
+  }catch(e){
+    errore(e);
+  }
 }
-
 async function aggiornaRiproduzione(){
   try{
     const dati=await leggi("riproduzione"),coppie=await leggi("coppie"),lista=$("listaRiproduzione");
