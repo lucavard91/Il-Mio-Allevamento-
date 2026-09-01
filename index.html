@@ -124,15 +124,39 @@ label{font-weight:bold}
   <button id="btnLogin">Accedi</button>
   <button id="btnRegister" class="secondary">Crea account</button>
   <button id="btnRecovery" class="secondary">Password dimenticata?</button>
+  <button id="btnRecoverAccount" class="secondary">🔑 Recupera account</button>
   <p id="loginMessage"></p>
 </div>
-
+<div id="recoverAccountScreen" class="hidden">
+  <h2>🔑 Recupera account</h2>
+  <p class="small">
+    Se hai già utilizzato MyAgari Manager ma non ricordi
+    quale indirizzo email hai utilizzato, prova con gli indirizzi
+    email che utilizzi abitualmente.
+  </p>
+  <input
+    id="recoverAccountEmail"
+    type="email"
+    placeholder="Inserisci la tua email"
+  >
+  <button id="btnSendRecoverAccount" class="success">
+    📧 Invia richiesta di recupero
+  </button>
+  <button id="btnCancelRecoverAccount" class="secondary">
+    ← Torna ad Accedi
+  </button>
+  <p id="recoverAccountMessage"></p>
+</div>
 <div id="resetScreen" class="hidden">
   <h2>Reimposta password</h2>
-  <p class="small">Inserisci la nuova password per il tuo account.</p>
+  <p class="small">
+    Inserisci la nuova password per il tuo account.
+  </p>
   <input id="newPassword" type="password" placeholder="Nuova password">
   <input id="newPasswordConfirm" type="password" placeholder="Ripeti nuova password">
-  <button id="btnUpdatePassword">Salva nuova password</button>
+  <button id="btnUpdatePassword">
+    Salva nuova password
+  </button>
   <p id="resetMessage"></p>
 </div>
 
@@ -590,7 +614,51 @@ async function registratiSupabase(){
     );
   }
 }
-
+function mostraRecuperaAccount(){
+  toggle("loginScreen",false);
+  toggle("resetScreen",false);
+  toggle("recoverAccountScreen",true);
+  const email=$("loginEmail")?.value||"";
+  const campo=$("recoverAccountEmail");
+  if(campo){
+    campo.value=email;
+    setTimeout(()=>campo.focus(),100);
+  }
+}
+function chiudiRecuperaAccount(){
+  toggle("recoverAccountScreen",false);
+  toggle("loginScreen",true);
+  toggle("resetScreen",false);
+  $("recoverAccountMessage").textContent="";
+}
+async function inviaRecuperaAccount(){
+  const email=valore("recoverAccountEmail");
+  if(!email){
+    $("recoverAccountMessage").textContent=
+      "Inserisci un indirizzo email.";
+    return;
+  }
+  const box=$("recoverAccountMessage");
+  try{
+    box.textContent="Invio della richiesta in corso...";
+    const redirectTo=
+      window.location.origin+
+      window.location.pathname;
+    const {error}=await sb.auth.resetPasswordForEmail(
+      email,
+      {redirectTo}
+    );
+    if(error)throw error;
+    box.textContent=
+      "Se l'indirizzo è associato a un account, "+
+      "riceverai un'email per recuperare l'accesso.";
+  }catch(e){
+    console.error(e);
+    box.textContent=
+      "Se l'indirizzo è associato a un account, "+
+      "riceverai un'email per recuperare l'accesso.";
+  }
+}
 async function mostraRecupero(){
   const email=valore("loginEmail");
   if(!email){msg("Inserisci prima la tua email, poi tocca Password dimenticata.");return;}
@@ -1961,6 +2029,9 @@ function bindUI(){
  $("btnRegister").onclick=registratiSupabase;
   $("btnAICoppie").onclick=suggerisciCoppieAI;
  $("btnRecovery").onclick=mostraRecupero;
+ $("btnRecoverAccount").onclick=mostraRecuperaAccount;
+$("btnSendRecoverAccount").onclick=inviaRecuperaAccount;
+$("btnCancelRecoverAccount").onclick=chiudiRecuperaAccount;
  $("btnUpdatePassword").onclick=aggiornaPassword;
  $("btnLogout").onclick=logout;
  $("newSoggetto").onclick=()=>mostraForm("formSoggetto");$("cancelSoggetto").onclick=()=>nascondiForm("formSoggetto");$("saveSoggetto").onclick=salvaSoggetto;
