@@ -543,13 +543,52 @@ async function loginSupabase(){
 
 async function registratiSupabase(){
   const email=valore("loginEmail"),password=$("loginPassword").value;
-  if(!email||!password){msg("Inserisci email e password.");return;}
+  if(!email||!password){
+    msg("Inserisci email e password.");
+    return;
+  }
   try{
-    const {data,error}=await sb.auth.signUp({email,password});
-    if(error){msg(error.message);return;}
-    if(data.session)await mostraApp();
-    else msg("Account creato. Controlla la tua email se Supabase richiede la conferma.",true);
-  }catch(e){msg("Errore durante la registrazione: "+(e?.message||e));}
+    msg("Verifica account in corso...",true);
+    const {data,error}=await sb.auth.signUp({
+      email,
+      password
+    });
+    if(error){
+      const testo=(error.message||"").toLowerCase();
+      if(
+        testo.includes("already") ||
+        testo.includes("registered") ||
+        testo.includes("exists") ||
+        testo.includes("user already")
+      ){
+        msg(
+          "Se questo indirizzo è già associato a un account, " +
+          "non è necessario crearne uno nuovo. " +
+          "Prova ad accedere oppure usa \"Password dimenticata?\"."
+        );
+        return;
+      }
+      msg("Impossibile creare l'account. Riprova oppure usa \"Password dimenticata?\".");
+      console.error(error);
+      return;
+    }
+    if(data?.session){
+      await mostraApp();
+      return;
+    }
+    msg(
+      "Se l'indirizzo è già associato a un account, " +
+      "puoi accedere oppure recuperare l'accesso con \"Password dimenticata?\". " +
+      "Altrimenti controlla la tua email per confermare il nuovo account.",
+      true
+    );
+  }catch(e){
+    console.error(e);
+    msg(
+      "Non è stato possibile completare la registrazione. " +
+      "Puoi provare ad accedere oppure recuperare l'accesso."
+    );
+  }
 }
 
 async function mostraRecupero(){
