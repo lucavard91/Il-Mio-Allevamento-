@@ -790,29 +790,71 @@ async function logout(){await sb.auth.signOut();location.reload();}
 async function mostraApp(){
   try{
     await caricaProfilo();
-    if(!accessoValido()&&profilo.ruolo!=="admin"){msg("Il tuo accesso non è attivo o è scaduto.");return;}
-    toggle("loginScreen",false);toggle("resetScreen",false);toggle("app",true);
+
+    if(!accessoValido()&&profilo.ruolo!=="admin"){
+      msg("Il tuo accesso non è attivo o è scaduto.");
+      return;
+    }
+
+    toggle("loginScreen",false);
+    toggle("resetScreen",false);
+    toggle("app",true);
+
     const u=await utenteCorrente();
-    const nomeCompleto=[profilo.nome,profilo.cognome]
-  .filter(Boolean)
-  .join(" ")
-  .trim();
 
-const rna=(profilo.rna||"").trim();
+    const nomeCompleto=[
+      profilo.nome,
+      profilo.cognome
+    ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
 
-$("utenteLoggato").innerHTML=
-  nomeCompleto
-    ? "<b>"+esc(nomeCompleto)+"</b>"+(rna?"<br>RNA: "+esc(rna):"")
-    : "Account: "+esc(u.email||"utente");
+    const rna=(profilo.rna||"").trim();
+
+    $("utenteLoggato").innerHTML=
+      nomeCompleto
+        ? "<b>"+esc(nomeCompleto)+"</b>"+
+          (rna?"<br>RNA: "+esc(rna):"")
+        : "Account: "+esc(u.email||"utente");
+
     mostraStatoAccount();
+
+    /*
+     * Mostra il modulo profilo solo al primo accesso,
+     * quando Nome e Cognome non sono ancora presenti.
+     */
+    const profiloCard=document
+      .getElementById("profiloNome")
+      ?.closest(".card");
+
+    if(profiloCard){
+      if(nomeCompleto){
+        profiloCard.style.display="none";
+      }else{
+        profiloCard.style.display="block";
+      }
+    }
+
     if(profilo.ruolo==="admin"&&!$("adminCard")){
-      $("homeGrid").insertAdjacentHTML("beforeend",'<div class="card" id="adminCard"><h2>👑 Amministrazione</h2><p>Gestisci utenti e scadenze.</p><button data-page="admin">Apri amministrazione</button></div>');
+      $("homeGrid").insertAdjacentHTML(
+        "beforeend",
+        '<div class="card" id="adminCard">'+
+        '<h2>👑 Amministrazione</h2>'+
+        '<p>Gestisci utenti e scadenze.</p>'+
+        '<button data-page="admin">Apri amministrazione</button>'+
+        '</div>'
+      );
+
       bindPageButtons();
     }
+
     await apriPagina("home");
-  }catch(e){msg("Profilo non disponibile: "+(e?.message||e));}
+
+  }catch(e){
+    msg("Profilo non disponibile: "+(e?.message||e));
+  }
 }
- 
 
 async function caricaCriteriFOI(razza,categoria="FORMA_POSIZIONE"){
   const box=$("risultatoStandardFOI"); if(!box)return;
