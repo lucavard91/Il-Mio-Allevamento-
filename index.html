@@ -2233,21 +2233,27 @@ async function costruisciAdmin(){
 
       <div class="admin-actions">
 
-        ${
-          p.attivo
-          ? `<button
-               class="secondary"
-               data-archive-user="${esc(p.user_id)}">
-               🔒 Archivia / disattiva
-             </button>`
-          : `<button
-               class="success"
-               data-restore-user="${esc(p.user_id)}">
-               ♻️ Ripristina account
-             </button>`
-        }
+  ${
+    p.attivo
+    ? `<button
+         class="secondary"
+         data-archive-user="${esc(p.user_id)}">
+         🔒 Archivia / disattiva
+       </button>`
+    : `<button
+         class="success"
+         data-restore-user="${esc(p.user_id)}">
+         ♻️ Ripristina account
+       </button>`
+  }
 
-      </div>
+  <button
+    class="danger"
+    data-delete-user="${esc(p.user_id)}">
+    🗑️ Elimina definitivamente
+  </button>
+
+</div>
     </div>
   `).join("");
 
@@ -2274,6 +2280,13 @@ async function costruisciAdmin(){
         true
       );
     });
+     document
+      .querySelectorAll("[data-delete-user]")
+      .forEach(b=>{
+        b.onclick=()=>richiediEliminazioneDefinitiva(
+          b.dataset.deleteUser
+        );
+      });
 }
 async function salvaProfiloAdmin(id){
  try{
