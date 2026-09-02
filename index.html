@@ -1837,14 +1837,36 @@ async function mostraCalendarioMensile(){
     ];
 
     let html=`
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">
-        ${giorniSettimana.map(g=>
-          `<div style="text-align:center;font-weight:bold;padding:6px;">${g}</div>`
-        ).join("")}
+      <div style="
+        width:100%;
+        overflow:hidden;
+      ">
+        <div style="
+          display:grid;
+          grid-template-columns:repeat(7,minmax(0,1fr));
+          gap:3px;
+          width:100%;
+        ">
+          ${giorniSettimana.map(g=>`
+            <div style="
+              text-align:center;
+              font-weight:bold;
+              font-size:12px;
+              padding:5px 1px;
+              min-width:0;
+            ">
+              ${g}
+            </div>
+          `).join("")}
     `;
 
     for(let i=0;i<primoGiorno;i++){
-      html+=`<div></div>`;
+      html+=`
+        <div style="
+          min-width:0;
+          min-height:70px;
+        "></div>
+      `;
     }
 
     for(let giorno=1;giorno<=giorniTotali;giorno++){
@@ -1852,58 +1874,84 @@ async function mostraCalendarioMensile(){
       const data=
         `${anno}-${String(mese+1).padStart(2,"0")}-${String(giorno).padStart(2,"0")}`;
 
-      const eventiGiorno=eventi.filter(e=>e.data===data);
+      const eventiGiorno=eventi.filter(
+        e=>e.data===data
+      );
 
       const eventiRiproduzione=[];
 
       riproduzioni.forEach(r=>{
 
         if(r.data_schiusa_prevista===data){
-          eventiRiproduzione.push(
-            `<div style="margin-top:4px;">
-              🐣 <b>Schiusa prevista</b><br>
+          eventiRiproduzione.push(`
+            <div style="
+              margin-top:3px;
+              font-size:10px;
+              line-height:1.2;
+              overflow-wrap:anywhere;
+            ">
+              🐣 <b>Schiusa</b><br>
               ${esc(r.coppia||"-")}
-            </div>`
-          );
+            </div>
+          `);
         }
 
         if(r.data_ultimo_uovo){
-          const d=new Date(r.data_ultimo_uovo+"T00:00:00");
+
+          const d=new Date(
+            r.data_ultimo_uovo+"T00:00:00"
+          );
+
           d.setDate(d.getDate()+7);
 
           const speratura=
             `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 
           if(speratura===data){
-            eventiRiproduzione.push(
-              `<div style="margin-top:4px;">
+            eventiRiproduzione.push(`
+              <div style="
+                margin-top:3px;
+                font-size:10px;
+                line-height:1.2;
+                overflow-wrap:anywhere;
+              ">
                 🔎 <b>Speratura</b><br>
                 ${esc(r.coppia||"-")}
-              </div>`
-            );
+              </div>
+            `);
           }
         }
-
       });
 
       const eventiManuali=eventiGiorno.map(e=>`
+
         <div
           class="calendar-event"
           data-calendar-event-id="${esc(e.id)}"
           style="
-            margin-top:5px;
-            padding:5px;
-            border-radius:6px;
+            margin-top:3px;
+            padding:4px;
+            border-radius:5px;
             background:#eef5ff;
             cursor:pointer;
+            font-size:10px;
+            line-height:1.2;
+            min-width:0;
+            max-width:100%;
+            overflow:hidden;
+            overflow-wrap:anywhere;
+            word-break:break-word;
           "
-          title="Tocca per visualizzare l'evento"
+          title="Tocca per visualizzare o eliminare l'evento"
         >
           📌 <b>${esc(e.evento||"Evento")}</b>
-          ${e.coppia_soggetto
-            ? `<br>${esc(e.coppia_soggetto)}`
-            : ""}
+          ${
+            e.coppia_soggetto
+              ? `<br>${esc(e.coppia_soggetto)}`
+              : ""
+          }
         </div>
+
       `).join("");
 
       const contenuto=[
@@ -1912,32 +1960,54 @@ async function mostraCalendarioMensile(){
       ].join("");
 
       html+=`
-        <div
-          style="
-            min-height:80px;
-            border:1px solid #ddd;
-            border-radius:8px;
-            padding:5px;
-          "
-        >
-          <div style="font-weight:bold;">${giorno}</div>
+
+        <div style="
+          min-width:0;
+          min-height:70px;
+          border:1px solid #ddd;
+          border-radius:6px;
+          padding:4px;
+          overflow:hidden;
+          box-sizing:border-box;
+        ">
+
+          <div style="
+            font-weight:bold;
+            font-size:12px;
+            margin-bottom:2px;
+          ">
+            ${giorno}
+          </div>
+
           ${contenuto}
+
         </div>
+
       `;
     }
 
-    html+=`</div>`;
+    html+=`
+        </div>
+      </div>
+    `;
+
     box.innerHTML=html;
 
     document
-      .querySelectorAll("[data-calendar-event-id]")
+      .querySelectorAll(
+        "#calendarioMensile [data-calendar-event-id]"
+      )
       .forEach(el=>{
+
         el.onclick=()=>{
+
           apriDettaglioEventoCalendario(
             el.dataset.calendarEventId,
             eventi
           );
+
         };
+
       });
 
   }catch(e){
