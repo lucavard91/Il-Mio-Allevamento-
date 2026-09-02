@@ -1838,7 +1838,9 @@ async function mostraCalendarioMensile(){
 
     let html=`
       <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">
-        ${giorniSettimana.map(g=>`<div style="text-align:center;font-weight:bold;padding:6px;">${g}</div>`).join("")}
+        ${giorniSettimana.map(g=>
+          `<div style="text-align:center;font-weight:bold;padding:6px;">${g}</div>`
+        ).join("")}
     `;
 
     for(let i=0;i<primoGiorno;i++){
@@ -1846,16 +1848,22 @@ async function mostraCalendarioMensile(){
     }
 
     for(let giorno=1;giorno<=giorniTotali;giorno++){
-      const data=`${anno}-${String(mese+1).padStart(2,"0")}-${String(giorno).padStart(2,"0")}`;
+
+      const data=
+        `${anno}-${String(mese+1).padStart(2,"0")}-${String(giorno).padStart(2,"0")}`;
 
       const eventiGiorno=eventi.filter(e=>e.data===data);
 
       const eventiRiproduzione=[];
 
       riproduzioni.forEach(r=>{
+
         if(r.data_schiusa_prevista===data){
           eventiRiproduzione.push(
-            `<div>🐣 <b>Schiusa prevista</b><br>${esc(r.coppia||"-")}</div>`
+            `<div style="margin-top:4px;">
+              🐣 <b>Schiusa prevista</b><br>
+              ${esc(r.coppia||"-")}
+            </div>`
           );
         }
 
@@ -1868,21 +1876,50 @@ async function mostraCalendarioMensile(){
 
           if(speratura===data){
             eventiRiproduzione.push(
-              `<div>🔎 <b>Speratura</b><br>${esc(r.coppia||"-")}</div>`
+              `<div style="margin-top:4px;">
+                🔎 <b>Speratura</b><br>
+                ${esc(r.coppia||"-")}
+              </div>`
             );
           }
         }
+
       });
+
+      const eventiManuali=eventiGiorno.map(e=>`
+        <div
+          class="calendar-event"
+          data-calendar-event-id="${esc(e.id)}"
+          style="
+            margin-top:5px;
+            padding:5px;
+            border-radius:6px;
+            background:#eef5ff;
+            cursor:pointer;
+          "
+          title="Tocca per visualizzare l'evento"
+        >
+          📌 <b>${esc(e.evento||"Evento")}</b>
+          ${e.coppia_soggetto
+            ? `<br>${esc(e.coppia_soggetto)}`
+            : ""}
+        </div>
+      `).join("");
 
       const contenuto=[
         ...eventiRiproduzione,
-        ...eventiGiorno.map(e=>
-          `<div>📌 <b>${esc(e.evento||"Evento")}</b><br>${esc(e.coppia_soggetto||"")}</div>`
-        )
+        eventiManuali
       ].join("");
 
       html+=`
-        <div style="min-height:80px;border:1px solid #ddd;border-radius:8px;padding:5px;">
+        <div
+          style="
+            min-height:80px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            padding:5px;
+          "
+        >
           <div style="font-weight:bold;">${giorno}</div>
           ${contenuto}
         </div>
@@ -1892,9 +1929,120 @@ async function mostraCalendarioMensile(){
     html+=`</div>`;
     box.innerHTML=html;
 
+    document
+      .querySelectorAll("[data-calendar-event-id]")
+      .forEach(el=>{
+        el.onclick=()=>{
+          apriDettaglioEventoCalendario(
+            el.dataset.calendarEventId,
+            eventi
+          );
+        };
+      });
+
   }catch(e){
     errore(e);
   }
+}
+ function apriDettaglioEventoCalendario(id,eventi){
+  const evento=(eventi||[]).find(e=>String(e.id)===String(id));
+  if(!evento)return;
+
+  const vecchio=$("calendarioEventoModal");
+  if(vecchio)vecchio.remove();
+
+  const modal=document.createElement("div");
+  modal.id="calendarioEventoModal";
+
+  modal.style.cssText=`
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:20px;
+  `;
+
+  modal.innerHTML=`
+    <div
+      class="card"
+      style="
+        width:min(520px,100%);
+        max-height:90vh;
+        overflow:auto;
+      "
+    >
+      <div class="page-title">
+        <h3>📅 Dettaglio evento</h3>
+        <button
+          type="button"
+          class="secondary"
+          id="chiudiDettaglioCalendario"
+        >
+          ✕
+        </button>
+      </div>
+
+      <p><b>Data:</b> ${esc(evento.data||"-")}</p>
+      <p><b>Evento:</b> ${esc(evento.evento||"-")}</p>
+      <p><b>Categoria:</b> ${esc(evento.categoria||"-")}</p>
+      <p><b>Coppia / soggetto:</b> ${esc(evento.coppia_soggetto||"-")}</p>
+      <p><b>Stato:</b> ${esc(evento.stato||"-")}</p>
+      <p><b>Note:</b> ${esc(evento.note||"-")}</p>
+
+      <div style="margin-top:20px;">
+        <button
+          type="button"
+          class="danger"
+          id="eliminaEventoCalendario"
+        >
+          🗑️ Elimina evento
+        </button>
+
+        <button
+          type="button"
+          class="secondary"
+          id="annullaEventoCalendario"
+        >
+          Annulla
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const chiudi=()=>{
+    modal.remove();
+  };
+
+  $("chiudiDettaglioCalendario").onclick=chiudi;
+  $("annullaEventoCalendario").onclick=chiudi;
+
+  $("eliminaEventoCalendario").onclick=async()=>{
+    const conferma=confirm(
+      "Sei sicuro di voler eliminare questo evento dal calendario?"
+    );
+
+    if(!conferma)return;
+
+    try{
+      await elimina("calendario",evento.id);
+
+      modal.remove();
+
+      alert("Evento eliminato correttamente.");
+
+      await mostraCalendarioMensile();
+
+      await aggiornaLista("calendario");
+
+    }catch(e){
+      errore(e);
+    }
+  };
 }
 async function salvaSalute(){
  try{const r={soggetto:valore("sal_soggetto"),data:valore("sal_data")||null,tipo:valore("sal_tipo"),peso:numero("sal_peso"),trattamento:valore("sal_trattamento"),scadenza:valore("sal_scadenza")||null,note:valore("sal_note")};await inserisci("salute",r);pulisciForm("formSalute");nascondiForm("formSalute");await aggiornaLista("salute");}catch(e){errore(e);}
