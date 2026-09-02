@@ -1818,7 +1818,9 @@ async function mostraCalendarioMensile(){
 
     const anno=meseCalendario.getFullYear();
     const mese=meseCalendario.getMonth();
-
+const oggi=new Date();
+const dataOggi=
+  `${oggi.getFullYear()}-${String(oggi.getMonth()+1).padStart(2,"0")}-${String(oggi.getDate()).padStart(2,"0")}`;
     const nomiMesi=[
       "Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
       "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"
@@ -1972,12 +1974,13 @@ async function mostraCalendarioMensile(){
         ">
 
           <div style="
-            font-weight:bold;
-            font-size:12px;
-            margin-bottom:2px;
-          ">
-            ${giorno}
-          </div>
+  font-weight:bold;
+  font-size:12px;
+  margin-bottom:2px;
+  color:${data===dataOggi ? "#16a34a" : "inherit"};
+">
+  ${data===dataOggi ? "🟢 " : ""}${giorno}
+</div>
 
           ${contenuto}
 
