@@ -1940,26 +1940,119 @@ function bindDeleteButtons(){document.querySelectorAll("[data-delete-table]").fo
 function bindEditCoppie(){document.querySelectorAll("[data-edit-coppia]").forEach(b=>{b.onclick=()=>modificaCoppia(b.dataset.editCoppia);});}
 
 async function costruisciAdmin(){
- if(profilo?.ruolo!=="admin")return;
- const box=$("adminList");box.innerHTML='<div class="card"><h3>👑 Gestione utenti</h3><p class="small">Imposta attivazione, scadenza, accesso illimitato e ruolo.</p></div><div id="adminRows"></div>';
- const {data,error}=await sb.from("profili_utenti").select("*").order("created_at",{ascending:false});
- if(error){$("adminRows").innerHTML='<div class="card error">'+esc(error.message)+'</div>';return;}
- $("adminRows").innerHTML=(data||[]).map(p=>`<div class="card"><h3>${p.ruolo==="admin"?"👑":"👤"} ${esc(p.nome||p.email||"Utente")}</h3>
- <p><b>Email:</b> ${esc(p.email||"-")}</p>
- <label>Attivo</label><select id="att_${esc(p.user_id)}"><option value="true" ${p.attivo?"selected":""}>Sì</option><option value="false" ${!p.attivo?"selected":""}>No</option></select>
- <label>Illimitato</label><select id="ill_${esc(p.user_id)}"><option value="false" ${!p.illimitato?"selected":""}>No</option><option value="true" ${p.illimitato?"selected":""}>Sì</option></select>
- <label>Scadenza</label><input id="exp_${esc(p.user_id)}" type="date" value="${esc(p.scadenza||"")}">
- <label>Ruolo</label><select id="role_${esc(p.user_id)}"><option value="utente" ${p.ruolo==="utente"?"selected":""}>Utente</option><option value="admin" ${p.ruolo==="admin"?"selected":""}>Admin</option></select>
- <button class="success" data-save-profile="${esc(p.user_id)}">Salva modifiche</button>
- <div class="admin-actions">
-   <button class="secondary" data-archive-user="${esc(p.user_id)}" ${p.attivo?'':'style="display:none"'}>🔒 Archivia / disattiva</button>
-   <button class="success" data-restore-user="${esc(p.user_id)}" ${p.attivo?'style="display:none"':''}>♻️ Ripristina account</button>
-   <button class="danger" data-delete-user="${esc(p.user_id)}" ${p.ruolo==="admin"?'disabled title="Account amministratore protetto"':''}>🗑️ Elimina definitivamente</button>
- </div></div>`).join("");
- document.querySelectorAll("[data-save-profile]").forEach(b=>b.onclick=()=>salvaProfiloAdmin(b.dataset.saveProfile));
- document.querySelectorAll("[data-archive-user]").forEach(b=>b.onclick=()=>gestisciStatoUtente(b.dataset.archiveUser,false));
- document.querySelectorAll("[data-restore-user]").forEach(b=>b.onclick=()=>gestisciStatoUtente(b.dataset.restoreUser,true));
- document.querySelectorAll("[data-delete-user]").forEach(b=>b.onclick=()=>richiediEliminazioneDefinitiva(b.dataset.deleteUser));
+  if(profilo?.ruolo!=="admin")return;
+
+  const box=$("adminList");
+  if(!box)return;
+
+  box.innerHTML=
+    '<div class="card">'+
+    '<h3>👑 Gestione utenti</h3>'+
+    '<p class="small">Gestisci attivazione, scadenza, accesso illimitato e ruolo degli utenti.</p>'+
+    '</div>'+
+    '<div id="adminRows"></div>';
+
+  const rows=$("adminRows");
+
+  const {data,error}=await sb
+    .from("profili_utenti")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    rows.innerHTML=
+      '<div class="card error">'+
+      esc(error.message)+
+      '</div>';
+    return;
+  }
+
+  if(!data||!data.length){
+    rows.innerHTML=
+      '<div class="card"><p>Nessun utente presente.</p></div>';
+    return;
+  }
+
+  rows.innerHTML=data.map(p=>`
+    <div class="card">
+      <h3>${p.ruolo==="admin"?"👑":"👤"} ${esc(p.nome||p.email||"Utente")}</h3>
+
+      <p><b>Email:</b> ${esc(p.email||"-")}</p>
+
+      <label>Attivo</label>
+      <select id="att_${esc(p.user_id)}">
+        <option value="true" ${p.attivo?"selected":""}>Sì</option>
+        <option value="false" ${!p.attivo?"selected":""}>No</option>
+      </select>
+
+      <label>Illimitato</label>
+      <select id="ill_${esc(p.user_id)}">
+        <option value="false" ${!p.illimitato?"selected":""}>No</option>
+        <option value="true" ${p.illimitato?"selected":""}>Sì</option>
+      </select>
+
+      <label>Scadenza</label>
+      <input
+        id="exp_${esc(p.user_id)}"
+        type="date"
+        value="${esc(p.scadenza||"")}"
+      >
+
+      <label>Ruolo</label>
+      <select id="role_${esc(p.user_id)}">
+        <option value="utente" ${p.ruolo==="utente"?"selected":""}>Utente</option>
+        <option value="admin" ${p.ruolo==="admin"?"selected":""}>Admin</option>
+      </select>
+
+      <button
+        class="success"
+        data-save-profile="${esc(p.user_id)}">
+        Salva modifiche
+      </button>
+
+      <div class="admin-actions">
+
+        ${
+          p.attivo
+          ? `<button
+               class="secondary"
+               data-archive-user="${esc(p.user_id)}">
+               🔒 Archivia / disattiva
+             </button>`
+          : `<button
+               class="success"
+               data-restore-user="${esc(p.user_id)}">
+               ♻️ Ripristina account
+             </button>`
+        }
+
+      </div>
+    </div>
+  `).join("");
+
+  document
+    .querySelectorAll("[data-save-profile]")
+    .forEach(b=>{
+      b.onclick=()=>salvaProfiloAdmin(b.dataset.saveProfile);
+    });
+
+  document
+    .querySelectorAll("[data-archive-user]")
+    .forEach(b=>{
+      b.onclick=()=>gestisciStatoUtente(
+        b.dataset.archiveUser,
+        false
+      );
+    });
+
+  document
+    .querySelectorAll("[data-restore-user]")
+    .forEach(b=>{
+      b.onclick=()=>gestisciStatoUtente(
+        b.dataset.restoreUser,
+        true
+      );
+    });
 }
 async function salvaProfiloAdmin(id){
  try{
