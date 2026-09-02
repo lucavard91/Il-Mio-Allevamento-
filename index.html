@@ -680,9 +680,32 @@ function mostraStatoAccount(){
 }
 
 async function apriPagina(nome){
-  if(nome!=="home"&&nome!=="admin"&&!accessoValido()){alert("Accesso non attivo o abbonamento scaduto.");return;}
-  if(nome==="admin"&&profilo?.ruolo!=="admin"){alert("Accesso negato.");return;}
-  nascondiTutto();toggle(nome,true);
+  if(nome!=="home"&&nome!=="admin"&&!accessoValido()){
+    alert("Accesso non attivo o abbonamento scaduto.");
+    return;
+  }
+
+  if(nome==="admin"&&profilo?.ruolo!=="admin"){
+    alert("Accesso negato.");
+    return;
+  }
+
+  // Nasconde completamente tutte le pagine
+  sezioni.forEach(id=>{
+    const e=$(id);
+    if(e){
+      e.classList.add("hidden");
+      e.style.display="none";
+    }
+  });
+
+  // Mostra esclusivamente la pagina richiesta
+  const pagina=$(nome);
+  if(pagina){
+    pagina.classList.remove("hidden");
+    pagina.style.display="";
+  }
+
   try{
     if(nome==="soggetti")await aggiornaSoggetti();
     if(nome==="standardFOI")await inizializzaStandardFOI();
@@ -690,11 +713,14 @@ async function apriPagina(nome){
     if(nome==="riproduzione")await aggiornaRiproduzione();
     if(nome==="genealogia")await mostraGenealogia();
     if(nome==="gabbie")await aggiornaGabbie();
-    if(["alimentazione","anellini","calendario","salute"].includes(nome))await aggiornaLista(nome);
+    if(["alimentazione","anellini","calendario","salute"].includes(nome)){
+      await aggiornaLista(nome);
+    }
     if(nome==="admin")await costruisciAdmin();
-  }catch(e){errore(e);}
+  }catch(e){
+    errore(e);
+  }
 }
-
 async function loginSupabase(){
   const email=valore("loginEmail"),password=$("loginPassword").value;
   if(!email||!password){msg("Inserisci email e password.");return;}
