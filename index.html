@@ -2995,11 +2995,10 @@ async function init(){
    if(session && (event==="INITIAL_SESSION" || event==="SIGNED_IN" || event==="TOKEN_REFRESHED" || event==="USER_UPDATED"))void avviaMostraApp();
    if(event==="SIGNED_OUT"){toggle("app",false);toggle("loginScreen",true);}
   });
-  const {data,error}=await sb.auth.getSession();
-  if(error){msg(error.message);return;}
-  if(data.session){
+  const {data}=await sb.auth.getSession();
+
+if(data?.session?.user){
   sessionUser=data.session.user;
-  await avviaMostraApp();
 }
  }catch(e){
   const text="Errore di avvio: "+(e?.message||e);
