@@ -2997,7 +2997,10 @@ async function init(){
   });
   const {data,error}=await sb.auth.getSession();
   if(error){msg(error.message);return;}
-  if(data.session)await avviaMostraApp();
+  if(data.session){
+  sessionUser=data.session.user;
+  await avviaMostraApp();
+}
  }catch(e){
   const text="Errore di avvio: "+(e?.message||e);
   const el=$("loginMessage");if(el){el.textContent=text;el.className="error";}
