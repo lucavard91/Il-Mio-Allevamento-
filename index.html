@@ -596,24 +596,23 @@ function accessoValido(){
 
 async function utenteCorrente(){
   if(sessionUser?.id)return sessionUser;
-  let ultimoErrore=null;
+
   for(let tentativo=0;tentativo<5;tentativo++){
     try{
-      const {data,error}=await sb.auth.getSession();
+      const {data}=await sb.auth.getSession();
+
       if(data?.session?.user){
         sessionUser=data.session.user;
         return sessionUser;
       }
-      if(error)ultimoErrore=error;
-    }catch(e){ultimoErrore=e;}
-    if(tentativo<4)await new Promise(r=>setTimeout(r,300));
+    }catch(e){}
+
+    if(tentativo<4){
+      await new Promise(r=>setTimeout(r,300));
+    }
   }
-  try{
-    const {data,error}=await sb.auth.getUser();
-    if(data?.user){sessionUser=data.user;return sessionUser;}
-    if(error)ultimoErrore=error;
-  }catch(e){ultimoErrore=e;}
-  throw ultimoErrore||new Error("Utente non autenticato.");
+
+  throw new Error("Utente non autenticato. Attendi qualche secondo e riprova.");
 }
 async function caricaProfilo(){
   const u=await utenteCorrente();
