@@ -1445,7 +1445,7 @@ async function eseguiValutazioneAI(id){
     if(!u)throw new Error("Utente non autenticato.");
     const fotoUrl=await recuperaFotoAssociataSoggetto(id,s);
     if(!fotoUrl)throw new Error("Nessuna foto valida associata a questo soggetto. Carica prima una foto.");
-    const {data:result,error:fnError}=await sb.functions.invoke("myagari-ai",{
+    const {data:result,error:fnError}=await sb.functions.invoke("smooth-endpoint",{
       body:{soggetto_id:String(id),allevamento_id:allevamentoAttivo?.id||null,soggetto:s,standardFonte:"FOI",foto_url:fotoUrl}
     });
     if(fnError)throw new Error(fnError.message||"Errore nel servizio AI.");
