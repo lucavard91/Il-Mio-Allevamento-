@@ -1325,14 +1325,38 @@ async function caricaFotoSoggetto(soggettoId,file){
   const u=await utenteCorrente();
   if(!allevamentoAttivo?.id)throw new Error("Nessun allevamento attivo.");
   if(!file?.type?.startsWith("image/"))throw new Error("Seleziona un file immagine.");
-  const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+
+  const ext=(file.name.split(".").pop()||"jpg")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g,"")||"jpg";
+
   const path=`${u.id}/${allevamentoAttivo.id}/${soggettoId}-${Date.now()}.${ext}`;
-  await verificaFotoBucket();
-  const up=await sb.storage.from(FOTO_BUCKET).upload(path,file,{upsert:true,contentType:file.type,cacheControl:"3600"});
-  if(up.error)throw new Error("Errore caricamento foto: "+(up.error.message||up.error.error_description||String(up.error)));
-  // Salviamo il PERCORSO, non un URL pubblico. Funziona anche con bucket privato.
-  const {error}=await sb.from("soggetti").update({foto_url:path}).eq("id",soggettoId).eq("allevamento_id",allevamentoAttivo.id);
+
+  const up=await sb.storage
+    .from(FOTO_BUCKET)
+    .upload(path,file,{
+      upsert:true,
+      contentType:file.type,
+      cacheControl:"3600"
+    });
+
+  if(up.error){
+    throw new Error(
+      "Errore caricamento foto: "+
+      (up.error.message||up.error.error_description||String(up.error))
+    );
+  }
+
+  // Salviamo il PERCORSO della foto nel soggetto.
+  // Il bucket corretto è myagari-fot.
+  const {error}=await sb
+    .from("soggetti")
+    .update({foto_url:path})
+    .eq("id",soggettoId)
+    .eq("allevamento_id",allevamentoAttivo.id);
+
   if(error)throw error;
+
   return await creaUrlFoto(path);
 }
 
