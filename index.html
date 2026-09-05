@@ -1466,19 +1466,24 @@ async function eseguiValutazioneAI(id){
       throw new Error("Utente non autenticato.");
     }
 
-    const fotoUrl=await recuperaFotoAssociataSoggetto(id,s);
-    const res=await fetch(endpoint,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        soggetto:s,
-        standardFonte:"FOI",
-        foto_url:fotoUrl||null
-      })
-    });
+const fotoUrl=await recuperaFotoAssociataSoggetto(id,s);
 
+const session=(await sb.auth.getSession()).data?.session;
+
+const res=await fetch(endpoint,{
+  method:"POST",
+  headers:{
+    "Content-Type":"application/json",
+    ...(session?.access_token
+      ? {"Authorization":"Bearer "+session.access_token}
+      : {})
+  },
+  body:JSON.stringify({
+    soggetto:s,
+    standardFonte:"FOI",
+    foto_url:fotoUrl||null
+  })
+});
     if(!res.ok){
       throw new Error(
         "Servizio AI non disponibile (HTTP "+res.status+")"
