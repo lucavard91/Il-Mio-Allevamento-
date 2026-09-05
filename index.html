@@ -1842,15 +1842,9 @@ function preparaFormCoppia(){
   // Maschio e femmina vengono inseriti manualmente dall'allevatore.
 }
 async function preparaSelettoreCoppieRiproduzione(valoreSelezionato=""){
-  try{
-    const coppie=await leggi("coppie");
-    const el=$("r_coppia");if(!el)return;
-    el.innerHTML='<option value="">Seleziona una coppia</option>'+(coppie||[]).map(c=>{
-      const v=String(c.codice||"").trim();
-      return '<option value="'+esc(v)+'">'+esc(v||"Coppia")+'</option>';
-    }).join("");
-    if(valoreSelezionato)el.value=valoreSelezionato;
-  }catch(e){console.warn("Selettore coppie non disponibile",e);}
+  const el=$("r_coppia");
+  if(!el)return;
+  if(valoreSelezionato)el.value=valoreSelezionato;
 }
 function dataAddGiorni(data,giorni){
   if(!data)return "";
