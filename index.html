@@ -1327,7 +1327,7 @@ async function caricaFotoSoggetto(soggettoId,file){
   if(!file?.type?.startsWith("image/"))throw new Error("Seleziona un file immagine.");
   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
   const path=`${u.id}/${allevamentoAttivo.id}/${soggettoId}-${Date.now()}.${ext}`;
-  await verificaFotoBucket();
+  
   const up=await sb.storage.from(FOTO_BUCKET).upload(path,file,{upsert:true,contentType:file.type,cacheControl:"3600"});
   if(up.error)throw new Error("Errore caricamento foto: "+(up.error.message||up.error.error_description||String(up.error)));
   // Salviamo il PERCORSO, non un URL pubblico. Funziona anche con bucket privato.
