@@ -360,9 +360,9 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <input id="s_mutazione" type="text" placeholder="Cerca mutazione..." autocomplete="off">
   <div id="suggerimentiMutazione" class="suggerimenti"></div>
 </div>
-    <label>Padre</label><input id="s_padre" placeholder="Anellino, codice o nome">
-    <label>Madre</label><input id="s_madre" placeholder="Anellino, codice o nome">
-    <label>Gabbia</label><input id="s_gabbia" placeholder="Numero o codice gabbia">
+   <label>Padre</label><input id="s_padre" placeholder="Numero, anno o RNA">
+    <label>Madre</label><input id="s_madre" placeholder="Numero, anno o RNA">
+    <label>Gabbia</label><input id="s_gabbia" placeholder="Numero">
    <label>Stato</label>
 <select id="s_stato">
   <option value="In allevamento">In allevamento</option>
@@ -3344,13 +3344,90 @@ box.innerHTML = `
     }
   };
 
-  const specie = [...new Set(Object.values(CATALOGO_FOI.categorie).flat())].sort((a,b)=>a.localeCompare(b,'it'));
-  const razze = specie;
+ const specie = [
+  "Canarino",
+  "Cardellino",
+  "Verdone",
+  "Lucherino",
+  "Organetto",
+  "Ciuffolotto",
+  "Fringuello",
+  "Peppola",
+  "Crocieri",
+  "Diamante di Gould",
+  "Diamante mandarino",
+  "Diamante codalunga",
+  "Diamante guttato",
+  "Padda",
+  "Passero del Giappone",
+  "Negrito della Bolivia",
+  "Cardinalino del Venezuela",
+  "Tortore",
+  "Colombi",
+  "Quaglie",
+  "Colini",
+  "Agapornis",
+  "Ondulati e Psittaciformi"
+].sort((a,b)=>a.localeCompare(b,'it'));
 
-  const input = id => $(id);
-  const stato = { specie: "", razza: "" };
+const razzePerSpecie = {
+  "Canarino": [
+    "Harzer Roller",
+    "Malinois Waterslager",
+    "Timbrado Spagnolo",
+    "Border",
+    "Bossu Belga",
+    "Crested",
+    "Crest-Bred",
+    "Fife Fancy",
+    "Gloster Fancy",
+    "Japan Hoso",
+    "Lancashire",
+    "Lizard",
+    "Norwich",
+    "Razza spagnola",
+    "Scotch Fancy",
+    "Yorkshire",
+    "Bernois",
+    "Ciuffato tedesco",
+    "Llarguet spagnolo",
+    "Munchener",
+    "Arlecchino portoghese",
+    "Irish Fancy",
+    "Rheinlander",
+    "Salentino",
+    "London Fancy",
+    "Rasmi Persian",
+    "Arricciato Gigante Italiano",
+    "Arricciato di Parigi",
+    "Arricciato Padovano",
+    "Arricciato del Nord",
+    "Rogetto",
+    "Mehringer",
+    "Fiorino",
+    "Melado Tinerfeño",
+    "Gibboso",
+    "Arricciato del Sud",
+    "Arricciato Svizzero",
+    "Benacus",
+    "Gibber Italicus",
+    "Giraldillo Sevillano",
+    "TorZuino"
+  ]
+};
 
-  const trovaMutazioni = () => {
+const input = id => $(id);
+const stato = { specie: "", razza: "" };
+
+const trovaRazze = () => {
+  const s = (input("s_specie")?.value || "").trim();
+  const key = Object.keys(razzePerSpecie).find(
+    k => k.toLowerCase() === s.toLowerCase()
+  );
+  return key ? razzePerSpecie[key] : [];
+};
+
+const trovaMutazioni = () => {
     const s = (input("s_specie")?.value || "").trim();
     if(CATALOGO_FOI.mutazioni[s]) return CATALOGO_FOI.mutazioni[s];
     const key = Object.keys(CATALOGO_FOI.mutazioni).find(k => k.toLowerCase() === s.toLowerCase());
@@ -3400,11 +3477,7 @@ box.innerHTML = `
   };
 
   configura("s_specie",()=>specie);
-  configura("s_razza",()=>{
-    const s=(input("s_specie")?.value||"").trim();
-    const cat=Object.values(CATALOGO_FOI.categorie).find(arr=>arr.includes(s));
-    return cat || razze;
-  });
+ configura("s_razza",trovaRazze);
   configura("s_mutazione",trovaMutazioni);
   input("s_specie")?.addEventListener("change",aggiornaInfo);
   input("s_specie")?.addEventListener("blur",aggiornaInfo);
