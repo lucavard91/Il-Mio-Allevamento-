@@ -114,22 +114,23 @@ label{font-weight:bold}
   box-shadow:0 0 0 100vmax rgba(17,24,39,.55),0 12px 40px rgba(0,0,0,.25);
 }
 
-#formGabbia.hidden{
-  display:none !important;
-}
- #formAlimentazione{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  z-index:10000;
-  width:min(560px,calc(100% - 40px));
+#formGabbia{
+  position:fixed !important;
+  top:50% !important;
+  left:50% !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:10000 !important;
+  width:min(560px,calc(100% - 40px)) !important;
   max-height:90vh;
   overflow:auto;
   background:#fff;
   border-radius:16px;
   padding:22px;
   box-shadow:0 0 0 100vmax rgba(17,24,39,.55),0 12px 40px rgba(0,0,0,.25);
+}
+
+#formGabbia.hidden{
+  display:none !important;
 }
 
 #formAlimentazione.hidden{
@@ -153,24 +154,25 @@ label{font-weight:bold}
 #formAnellini.hidden{
   display:none !important;
 }
- #formSalute{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  z-index:10000;
-  width:min(560px,calc(100% - 40px));
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 0 0 100vmax rgba(17,24,39,.55),0 12px 40px rgba(0,0,0,.25);
+#formSalute{
+  position:fixed !important;
+  top:50% !important;
+  left:50% !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:10000 !important;
+  width:min(560px,calc(100% - 40px)) !important;
+  max-height:90vh !important;
+  overflow:auto !important;
+  background:#fff !important;
+  border-radius:16px !important;
+  padding:22px !important;
+  box-shadow:0 0 0 100vmax rgba(17,24,39,.55),0 12px 40px rgba(0,0,0,.25) !important;
 }
 
 #formSalute.hidden{
   display:none !important;
 }
+
  #formCoppia{
   position:fixed;
   top:50%;
@@ -626,10 +628,13 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <label>Data</label>
   <input id="a_data" type="date">
 
-  <label>Alimento</label>
-  <input id="a_alimento" placeholder="Es. Miscela semi">
+<label>Alimento</label>
+<input id="a_alimento" placeholder="Es. Miscela semi">
 
-  <label>Fase</label>
+<label>Gabbia / Soggetto</label>
+<input id="a_gabbia_soggetto" placeholder="Numero gabbia oppure numero soggetto">
+
+<label>Fase</label>
   <select id="a_fase">
     <option value="">Seleziona fase</option>
     <option value="RIPRODUZIONE">RIPRODUZIONE</option>
@@ -2264,17 +2269,43 @@ async function aggiornaGabbie(){
 }
 
 const listaColonne={
- alimentazione:["data","alimento","specie_fase","quantita","unita","frequenza","note"],
+alimentazione:["data","alimento","gabbia_soggetto","specie_fase","quantita","unita","frequenza","note"],
  anellini:["anno","numero","colore","misura","tipo","soggetto","stato","note"],
  calendario:["data","evento","categoria","coppia_soggetto","stato","note"],
  salute:["soggetto","data","tipo","peso","trattamento","scadenza","note"]
 };
-const listaTitoli={quantita:"Quantità",unita:"Unità",coppia_soggetto:"Coppia/soggetto",specie_fase:"Specie / fase"};
+const listaTitoli={
+  quantita:"Quantità",
+  unita:"Unità",
+  coppia_soggetto:"Coppia/soggetto",
+  specie_fase:"Specie / fase",
+  gabbia_soggetto:"Gabbia / Soggetto"
+};
 
 async function salvaAlimentazione(){
-  try{const r={data:valore("a_data")||null,alimento:valore("a_alimento"),specie_fase:valore("a_fase"),quantita:numero("a_quantita"),unita:valore("a_unita"),frequenza:valore("a_frequenza"),note:valore("a_note")};await inserisci("alimentazione",r);pulisciForm("formAlimentazione");nascondiForm("formAlimentazione");await aggiornaLista("alimentazione");}catch(e){errore(e);}
-}
+  try{
+    const r={
+      data:valore("a_data")||null,
+      alimento:valore("a_alimento"),
+      gabbia_soggetto:valore("a_gabbia_soggetto"),
+      specie_fase:valore("a_fase"),
+      quantita:numero("a_quantita"),
+      unita:valore("a_unita"),
+      frequenza:valore("a_frequenza"),
+      note:valore("a_note")
+    };
 
+    await inserisci("alimentazione",r);
+
+    pulisciForm("formAlimentazione");
+    nascondiForm("formAlimentazione");
+
+    await aggiornaLista("alimentazione");
+
+  }catch(e){
+    errore(e);
+  }
+}
 
 async function salvaCalendario(){
   try{
