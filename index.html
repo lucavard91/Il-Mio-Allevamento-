@@ -867,23 +867,13 @@ body{overflow-x:hidden;overscroll-behavior-x:none;}
 })();
 </script>
 
-<style id="ob-v2632-today-style">
-#obV2632Today{display:grid;grid-template-columns:minmax(0,1fr) 1px minmax(0,1.16fr) 1px minmax(0,1fr);align-items:stretch;gap:0;margin:10px 0 12px;padding:10px 12px;border:1px solid rgba(185,147,61,.55);border-radius:20px;background:linear-gradient(135deg,rgba(251,250,242,.96),rgba(235,242,231,.94));box-shadow:0 8px 24px rgba(26,54,39,.09);overflow:hidden}
+<style id="ob-v2632a-today-style">
+#obV2632Today{display:grid;grid-template-columns:minmax(0,1fr) 1px minmax(0,1.12fr) 1px minmax(0,1fr);align-items:stretch;gap:0;margin:10px 0 12px;padding:10px 12px;border:1px solid rgba(185,147,61,.55);border-radius:20px;background:linear-gradient(135deg,rgba(251,250,242,.96),rgba(235,242,231,.94));box-shadow:0 8px 24px rgba(26,54,39,.09);overflow:hidden}
 .ob-v2632-divider{width:1px;background:linear-gradient(transparent,rgba(180,155,87,.55),transparent);margin:2px 8px}
 .ob-v2632-segment{min-width:0;display:flex;align-items:center;gap:8px;padding:3px 2px;background:transparent;border:0;text-align:left;color:#172019;font:inherit}
-button.ob-v2632-segment{cursor:pointer}
 .ob-v2632-thumb{width:44px;height:44px;flex:0 0 44px;border-radius:13px;display:grid;place-items:center;font-size:24px;background:linear-gradient(145deg,#eff4e9,#dbe8d5);box-shadow:inset 0 0 0 1px rgba(185,147,61,.38);color:#27633f}
-.ob-v2632-copy{min-width:0;display:flex;flex-direction:column;line-height:1.08}
-.ob-v2632-copy strong{font-size:18px;color:#151b17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ob-v2632-copy span{font-size:11px;margin-top:4px;color:#4e5b53;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ob-v2632-copy small{font-size:9.5px;margin-top:3px;color:#6e786f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ob-v2632-weather-top{display:flex;align-items:center;gap:6px;min-width:0}
-#obV2632WeatherRefresh{width:28px;height:28px;min-width:28px;padding:0;border-radius:9px;border:0;background:#1d7a4a;color:white;font-size:19px;line-height:1;box-shadow:0 2px 7px rgba(16,81,46,.18)}
-#obV2632WeatherRefresh.ob-loading{animation:obV2632Spin .8s linear infinite}
-@keyframes obV2632Spin{to{transform:rotate(360deg)}}
-.ob-v2632-phase{position:relative;padding-right:16px}
-.ob-v2632-phase .ob-v2632-copy strong{font-size:15px}
-.ob-v2632-arrow{position:absolute;right:1px;font-size:27px;color:#253b2c}
+.ob-v2632-copy{min-width:0;display:flex;flex-direction:column;line-height:1.08}.ob-v2632-copy strong{font-size:18px;color:#151b17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ob-v2632-copy span{font-size:11px;margin-top:4px;color:#4e5b53;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ob-v2632-copy small{font-size:9.5px;margin-top:3px;color:#6e786f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ob-v2632-weather-top{display:flex;align-items:center;gap:6px;min-width:0}#obV2632WeatherRefresh{width:28px;height:28px;min-width:28px;padding:0;border-radius:9px;border:0;background:#1d7a4a;color:white;font-size:19px;line-height:1}.ob-v2632-phase{position:relative;padding-right:16px}.ob-v2632-phase .ob-v2632-copy strong{font-size:15px}.ob-v2632-arrow{position:absolute;right:1px;font-size:27px;color:#253b2c}
 @media(max-width:560px){#obV2632Today{grid-template-columns:minmax(0,.92fr) 1px minmax(0,1.18fr) 1px minmax(0,.98fr);padding:9px 8px;border-radius:18px}.ob-v2632-divider{margin:2px 5px}.ob-v2632-segment{gap:6px}.ob-v2632-thumb{width:36px;height:36px;flex-basis:36px;border-radius:11px;font-size:20px}.ob-v2632-copy strong{font-size:16px}.ob-v2632-copy span{font-size:9.5px}.ob-v2632-copy small{font-size:8.5px}.ob-v2632-phase .ob-v2632-copy strong{font-size:13px}#obV2632WeatherRefresh{width:24px;height:24px;min-width:24px;font-size:16px}.ob-v2632-arrow{font-size:22px}}
 @media(max-width:390px){.ob-v2632-thumb{width:32px;height:32px;flex-basis:32px}.ob-v2632-copy strong{font-size:14px}.ob-v2632-phase .ob-v2632-copy strong{font-size:12px}.ob-v2632-copy span{font-size:8.8px}.ob-v2632-copy small{display:none}}
 @media(min-width:1100px){#obV2632Today{padding:14px 18px;margin:14px 0 18px}.ob-v2632-thumb{width:54px;height:54px;flex-basis:54px;font-size:29px}.ob-v2632-copy strong{font-size:21px}.ob-v2632-copy span{font-size:12px}.ob-v2632-copy small{font-size:10.5px}}
@@ -1084,33 +1074,21 @@ button.ob-v2632-segment{cursor:pointer}
     </div>
   </div>
 
-
   <div class="ob-v2632-today" id="obV2632Today" aria-label="Oggi in OrniBreed">
     <div class="ob-v2632-segment ob-v2632-clock">
       <div class="ob-v2632-thumb" aria-hidden="true">◷</div>
-      <div class="ob-v2632-copy">
-        <strong id="obV2632Time">--:--</strong>
-        <span id="obV2632Date">--</span>
-      </div>
+      <div class="ob-v2632-copy"><strong>--:--</strong><span>Ora e data</span></div>
     </div>
     <div class="ob-v2632-divider"></div>
     <div class="ob-v2632-segment ob-v2632-weather">
-      <div class="ob-v2632-thumb" id="obV2632WeatherIcon" aria-hidden="true">☀</div>
-      <div class="ob-v2632-copy">
-        <div class="ob-v2632-weather-top"><strong id="obV2632Temp">--°</strong><button id="obV2632WeatherRefresh" type="button" aria-label="Aggiorna meteo" title="Aggiorna meteo">↻</button></div>
-        <span id="obV2632Location">Posizione attuale</span>
-        <small id="obV2632WeatherText">Meteo non aggiornato</small>
-      </div>
+      <div class="ob-v2632-thumb" aria-hidden="true">☀</div>
+      <div class="ob-v2632-copy"><div class="ob-v2632-weather-top"><strong>--°</strong><button id="obV2632WeatherRefresh" type="button" aria-label="Aggiorna meteo" title="Aggiorna meteo">↻</button></div><span>Meteo</span><small>Anteprima layout</small></div>
     </div>
     <div class="ob-v2632-divider"></div>
-    <button class="ob-v2632-segment ob-v2632-phase" id="obV2632PhaseBtn" type="button" aria-label="Apri consigli della fase attuale">
+    <div class="ob-v2632-segment ob-v2632-phase">
       <div class="ob-v2632-thumb" aria-hidden="true">❧</div>
-      <div class="ob-v2632-copy">
-        <strong id="obV2632Phase">Fase attuale</strong>
-        <span id="obV2632PhaseSub">Calendario naturale del canarino</span>
-      </div>
-      <b class="ob-v2632-arrow">›</b>
-    </button>
+      <div class="ob-v2632-copy"><strong>Fase attuale</strong><span>Calendario naturale</span></div><b class="ob-v2632-arrow">›</b>
+    </div>
   </div>
 
   <div class="card" id="v18ProfileHomeCard">
@@ -6913,7 +6891,10 @@ function v185StampaDocumentoCorrente(){
   const w=window.open("","_blank");
   if(!w){alert("Il browser non ha aperto la finestra di stampa. Riprova premendo di nuovo “Stampa”.");return;}
   const d=v185DocumentoCorrente;
-  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(d.titolo)}</title><style>${v185PrintCss(d.orientamento)}</style></head><body>${v185DocumentoHtml(d.titolo,d.html)}</body></html>`);
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(d.titolo)}</title><style>${v185PrintCss(d.orientamento)}</style></head><body>${v185DocumentoHtml(d.titolo,d.html)}
+
+
+</body></html>`);
   w.document.close();
   w.focus();
   w.print();
@@ -9829,25 +9810,6 @@ table{max-width:100%}
  const S=[['formSoggetto','saveSoggetto'],['formCoppia','saveCoppia'],['formRiproduzione','saveRiproduzione'],['formGabbia','saveGabbia'],['formAlimentazione','saveAlimentazione'],['formCalendario','saveCalendario'],['formSalute','saveSalute']];
  const C=[['formSoggetto','cancelSoggetto'],['formCoppia','cancelCoppia'],['formRiproduzione','cancelRiproduzione'],['formGabbia','cancelGabbia'],['formAlimentazione','cancelAlimentazione'],['formCalendario','cancelCalendario'],['formSalute','cancelSalute']];
  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&String(e.key).toLowerCase()==='s'){const h=S.find(([f])=>visible(f));if(h){const b=document.getElementById(h[1]);if(b&&!b.disabled){e.preventDefault();b.click();}}return;}if(e.key==='Escape'){const h=C.find(([f])=>visible(f));if(h){const b=document.getElementById(h[1]);if(b){e.preventDefault();b.click();}}}});
-})();
-</script>
-
-<script id="ob-v2632-today-script">
-(function(){
-  const $=id=>document.getElementById(id);
-  const STORE='ornibreed_v2632_weather_cache';
-  function fmtDate(d){try{return new Intl.DateTimeFormat(undefined,{weekday:'long',day:'2-digit',month:'long'}).format(d)}catch(_){return d.toLocaleDateString()}}
-  function tick(){const d=new Date(); const t=$('obV2632Time'),dt=$('obV2632Date'); if(t)t.textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); if(dt)dt.textContent=fmtDate(d)}
-  function normDoy(date,lat){const start=new Date(date.getFullYear(),0,0);let doy=Math.floor((date-start)/86400000);if(lat<0)doy=((doy+182-1)%365)+1;return doy}
-  function phaseFor(date,lat){const d=normDoy(date,lat||46.5); if(d>=213&&d<=288)return['Muta','Ricambio del piumaggio']; if(d>=289||d<=31)return['Riposo','Periodo di mantenimento']; if(d>=32&&d<=73)return['Preparazione','Alla riproduzione']; return['Riproduzione','Calendario naturale'];}
-  function renderPhase(lat){const p=phaseFor(new Date(),lat);const el=$('obV2632Phase'),sub=$('obV2632PhaseSub');if(el)el.textContent=p[0];if(sub)sub.textContent=p[1]}
-  function wmo(code){if(code===0)return['☀','Sereno'];if([1,2].includes(code))return['🌤','Parzialmente nuvoloso'];if(code===3)return['☁','Nuvoloso'];if([45,48].includes(code))return['🌫','Nebbia'];if(code>=51&&code<=67)return['🌧','Pioggia'];if(code>=71&&code<=77)return['❄','Neve'];if(code>=80&&code<=82)return['🌦','Rovesci'];if(code>=95)return['⛈','Temporale'];return['☁','Variabile']}
-  function paintWeather(o){if(!o)return;const wi=wmo(Number(o.code));if($('obV2632Temp'))$('obV2632Temp').textContent=Math.round(Number(o.temp))+'°C';if($('obV2632WeatherIcon'))$('obV2632WeatherIcon').textContent=wi[0];if($('obV2632WeatherText'))$('obV2632WeatherText').textContent=o.text||wi[1];if($('obV2632Location'))$('obV2632Location').textContent=o.location||'Posizione attuale';renderPhase(Number(o.lat)||46.5)}
-  async function reverse(lat,lon){try{const r=await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+encodeURIComponent(lat)+'&longitude='+encodeURIComponent(lon)+'&localityLanguage=it',{cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();return j.city||j.locality||j.principalSubdivision||'Posizione attuale'}catch(_){return 'Posizione attuale'}}
-  async function fetchWeather(lat,lon){const u='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(lat)+'&longitude='+encodeURIComponent(lon)+'&current=temperature_2m,weather_code&timezone=auto';const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('weather');const j=await r.json();const loc=await reverse(lat,lon);const wi=wmo(Number(j.current&&j.current.weather_code));return{temp:j.current&&j.current.temperature_2m,code:j.current&&j.current.weather_code,text:wi[1],location:loc,lat,lon,ts:Date.now()}}
-  function refresh(){const b=$('obV2632WeatherRefresh');if(b)b.classList.add('ob-loading');if(!navigator.geolocation){if(b)b.classList.remove('ob-loading');return}navigator.geolocation.getCurrentPosition(async pos=>{try{const o=await fetchWeather(pos.coords.latitude,pos.coords.longitude);localStorage.setItem(STORE,JSON.stringify(o));paintWeather(o)}catch(_){if($('obV2632WeatherText'))$('obV2632WeatherText').textContent='Aggiornamento non disponibile'}finally{if(b)b.classList.remove('ob-loading')}},()=>{if($('obV2632WeatherText'))$('obV2632WeatherText').textContent='Posizione non autorizzata';if(b)b.classList.remove('ob-loading')},{enableHighAccuracy:false,timeout:10000,maximumAge:600000})}
-  function openAdvice(){const candidates=['consigli','consigli_allevamento','consigli-riproduzione'];for(const id of candidates){const sec=document.getElementById(id);if(sec){document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));sec.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}}const btn=document.querySelector('[data-v18-page="consigli"]');if(btn)btn.click()}
-  document.addEventListener('DOMContentLoaded',()=>{tick();setInterval(tick,30000);renderPhase(46.5);try{paintWeather(JSON.parse(localStorage.getItem(STORE)||'null'))}catch(_){};$('obV2632WeatherRefresh')?.addEventListener('click',refresh);$('obV2632PhaseBtn')?.addEventListener('click',openAdvice);setTimeout(()=>{try{const c=JSON.parse(localStorage.getItem(STORE)||'null');if(!c||Date.now()-Number(c.ts||0)>30*60*1000)refresh()}catch(_){refresh()}},1200)});
 })();
 </script>
 </body>
