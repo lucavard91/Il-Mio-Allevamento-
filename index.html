@@ -1026,7 +1026,7 @@ body{overflow-x:hidden;overscroll-behavior-x:none;}
 </style>
 
 <style id="ob-v26374-home-mobile-compact-css">
-/* V26.37.4 — solo Home mobile: card griglia compatte, nessun overflow */
+/* V26.37.7 — solo Home mobile: card griglia compatte, nessun overflow */
 @media (max-width:760px){
   #homeGrid.ob-v26372-grid{align-items:stretch!important}
   #homeGrid.ob-v26372-grid>.card{
@@ -10021,7 +10021,7 @@ table{max-width:100%}
     welcome.insertAdjacentElement("afterend",bar);
 
     // Usiamo immagini individuali già presenti e approvate nell'app: nessun ritaglio da mockup.
-    // V26.37.4: "Questa settimana" è ricostruita dentro la stessa fascia di Ora/Meteo/Muta.
+    // V26.37.7: "Questa settimana" è ricostruita dentro la stessa fascia di Ora/Meteo/Muta.
     const weekItem=byId("obV2633WeekItem");
     const weekOpen=byId("obV2633WeekOpen");
     if(weekItem) weekItem.addEventListener("click",openWeek);
@@ -10206,7 +10206,7 @@ table{max-width:100%}
 
 
 <style id="ob-v26372-grid-list-css">
-/* V26.37.4 — selettore reale Griglia/Lista Home, solo mobile */
+/* V26.37.7 — selettore reale Griglia/Lista Home, solo mobile */
 .ob-v26372-layout-switch{display:none}
 @media (max-width:700px){
   .ob-v26372-layout-switch{display:flex;justify-content:flex-end;gap:7px;margin:0 0 10px}
@@ -10247,93 +10247,195 @@ table{max-width:100%}
 </script>
 
 
-<style id="ob-v26376-home-card-info-css">
-/* V26.37.6 — SOLO Home card: descrizioni in info + mobile compatto. Base: V26.37.4 approvata. */
-#homeGrid > .card{position:relative;min-width:0;box-sizing:border-box;overflow:hidden}
-#homeGrid > .card > p{display:none!important}
-#homeGrid > .card .ob-v26376-info{
-  position:absolute;top:8px;right:8px;z-index:3;
-  width:26px!important;height:26px!important;min-width:26px!important;
-  padding:0!important;margin:0!important;border-radius:50%!important;
-  border:1.5px solid #17372b!important;background:#fff!important;color:#17372b!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  font-size:14px!important;font-weight:900!important;line-height:1!important;box-shadow:none!important;
+<style id="ob-v26377-home-card-info-css">
+/* V26.37.7 — Base V26.37.7 approvata. Solo Home: card compatte + info coerenti + fascia 2x2 mobile. */
+#homeGrid > .card{
+  position:relative;
+  min-width:0;
+  box-sizing:border-box;
 }
-#homeGrid > .card > h2,#homeGrid > .card > h3{padding-right:30px}
-#homeGrid > .card button[data-page],#homeGrid > .card a[data-page]{max-width:100%;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere}
-#homeGrid > #adminCard .ob-v2618-admin{width:100%!important;max-width:100%!important;box-sizing:border-box!important;white-space:normal!important;overflow-wrap:anywhere!important}
+/* La descrizione resta nel DOM per l'accessibilità/info, ma non occupa spazio nella card. */
+#homeGrid > .card > p{display:none!important;}
+#homeGrid > .card .ob-v26377-info{
+  position:absolute!important;
+  top:8px!important;
+  right:8px!important;
+  width:27px!important;
+  height:27px!important;
+  min-width:27px!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:50%!important;
+  border:2px solid #111!important;
+  background:#fff!important;
+  color:#111!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:15px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  z-index:4!important;
+  box-sizing:border-box!important;
+}
+#homeGrid > .card > h2,
+#homeGrid > .card > h3,
+#homeGrid > .card > .ob-icon-title{padding-right:34px!important;}
+#homeGrid > #adminCard .ob-v2618-admin{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
 
-@media (max-width:700px){
-  /* Fascia superiore: 4 riquadri nello stesso contenitore, 2x2 */
-  #obV2633Today .ob2633-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  #obV2633Today .ob2633-item{min-width:0!important;border-top:0!important;border-left:0!important}
-  #obV2633Today .ob2633-item:nth-child(even){border-left:1px solid rgba(31,91,63,.14)!important}
-  #obV2633Today .ob2633-item:nth-child(n+3){border-top:1px solid rgba(31,91,63,.14)!important}
-
-  /* Card Home più compatte senza cambiare la logica Griglia/Lista */
-  #homeGrid.ob-v26372-grid>.card{padding:9px 7px!important;min-height:0!important}
-  #homeGrid.ob-v26372-grid>.card .ob-icon-title{font-size:14px!important;line-height:1.15!important;gap:5px!important;padding-right:28px!important}
-  #homeGrid.ob-v26372-grid>.card img.ob-section-icon{width:38px!important;height:38px!important;flex-basis:38px!important}
-  #homeGrid.ob-v26372-grid>.card button[data-page],#homeGrid.ob-v26372-grid>.card a[data-page]{
-    width:100%!important;max-width:100%!important;box-sizing:border-box!important;
-    font-size:10.5px!important;line-height:1.15!important;padding:6px 4px!important;margin-top:7px!important;
-    white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
+@media (max-width:760px){
+  /* Ora / Meteo / Muta / Questa settimana: un'unica fascia 2 x 2. */
+  #obV2633Today .ob2633-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-auto-flow:row!important;
   }
-  #homeGrid>.card .ob-v26376-info{top:6px;right:6px;width:23px!important;height:23px!important;min-width:23px!important;font-size:12px!important}
+  #obV2633Today .ob2633-item{
+    min-width:0!important;
+    border-top:0!important;
+    border-left:0!important;
+  }
+  #obV2633Today .ob2633-item:nth-child(even){border-left:1px solid rgba(31,91,63,.14)!important;}
+  #obV2633Today .ob2633-item:nth-child(n+3){border-top:1px solid rgba(31,91,63,.14)!important;}
+
+  /* Griglia Home: più compatta, senza alterare il selettore Griglia/Lista già approvato. */
+  #homeGrid.ob-v26372-grid > .card{
+    padding:9px 7px!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #homeGrid.ob-v26372-grid > .card .ob-icon-title{
+    margin:0 0 7px!important;
+    gap:5px!important;
+    font-size:14px!important;
+    line-height:1.12!important;
+    padding-right:27px!important;
+    overflow-wrap:anywhere!important;
+  }
+  #homeGrid.ob-v26372-grid > .card img.ob-section-icon{
+    width:38px!important;
+    height:38px!important;
+    flex:0 0 38px!important;
+    border-radius:10px!important;
+  }
+  #homeGrid.ob-v26372-grid > .card button[data-page],
+  #homeGrid.ob-v26372-grid > .card button.ob-v2618-open,
+  #homeGrid.ob-v26372-grid > .card a[data-page]{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    padding:6px 4px!important;
+    margin:0!important;
+    font-size:10.5px!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  #homeGrid > .card .ob-v26377-info{
+    top:6px!important;
+    right:6px!important;
+    width:23px!important;
+    height:23px!important;
+    min-width:23px!important;
+    font-size:12px!important;
+    border-width:1.5px!important;
+  }
 }
 </style>
-<script id="ob-v26376-home-card-info-js">
+<script id="ob-v26377-home-card-info-js">
 (function(){
   'use strict';
-  let scheduled=false;
-  function textOf(card){
-    const p=[...card.children].find(el=>el.tagName==='P');
-    return p ? (p.textContent||'').trim() : '';
+
+  function escText(v){ return String(v==null?'':v); }
+
+  function directDescription(card){
+    if(!card) return '';
+    var kids=card.children;
+    for(var i=0;i<kids.length;i++){
+      if(kids[i].tagName==='P') return (kids[i].textContent||'').trim();
+    }
+    return '';
   }
-  function titleOf(card){
-    const h=card.querySelector(':scope > h2,:scope > h3,.ob-icon-title');
+
+  function cardTitle(card){
+    if(!card) return 'Informazioni';
+    var h=card.querySelector('.ob-icon-title, h2, h3');
     return h ? (h.textContent||'').trim() : 'Informazioni';
   }
-  function openInfo(title,description){
-    if(!description) description='Sezione di OrniBreed Manager.';
-    const ov=document.createElement('div');
+
+  function showInfo(title,desc){
+    var old=document.getElementById('obV26377InfoOverlay');
+    if(old) old.remove();
+    var ov=document.createElement('div');
+    ov.id='obV26377InfoOverlay';
     ov.className='v222-help-overlay';
-    const box=document.createElement('div'); box.className='v222-help-box';
-    const head=document.createElement('div'); head.className='v222-help-head';
-    const h=document.createElement('h3'); h.textContent=title;
-    const x=document.createElement('button'); x.type='button'; x.className='v222-help-close'; x.setAttribute('aria-label','Chiudi'); x.textContent='×';
-    const p=document.createElement('p'); p.textContent=description;
-    head.append(h,x); box.append(head,p); ov.append(box);
-    x.addEventListener('click',()=>ov.remove());
-    ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+    var box=document.createElement('div');
+    box.className='v222-help-box';
+    var head=document.createElement('div');
+    head.className='v222-help-head';
+    var h=document.createElement('h3'); h.textContent=title || 'Informazioni';
+    var x=document.createElement('button');
+    x.type='button'; x.className='v222-help-close'; x.textContent='×';
+    x.setAttribute('aria-label','Chiudi');
+    var p=document.createElement('p');
+    p.textContent=desc || 'Sezione di OrniBreed Manager.';
+    head.appendChild(h); head.appendChild(x); box.appendChild(head); box.appendChild(p); ov.appendChild(box);
+    x.addEventListener('click',function(){ov.remove();});
+    ov.addEventListener('click',function(e){if(e.target===ov) ov.remove();});
     document.body.appendChild(ov);
   }
-  function normalize(){
-    const grid=document.getElementById('homeGrid'); if(!grid) return;
-    [...grid.children].forEach(card=>{
-      if(!(card instanceof HTMLElement) || !card.classList.contains('card')) return;
-      const desc=textOf(card); const title=titleOf(card);
-      // Le vecchie "i" della Home vengono sostituite da una sola info coerente per card.
-      card.querySelectorAll('.v222-info-btn,.ob-v26376-info').forEach(b=>b.remove());
-      const info=document.createElement('button');
-      info.type='button'; info.className='ob-v26376-info v222-no-print'; info.textContent='i';
-      info.title='Informazioni su '+title; info.setAttribute('aria-label','Informazioni su '+title);
-      info.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openInfo(title,desc);});
-      card.appendChild(info);
+
+  function addInfoToCard(card){
+    if(!card || !card.classList || !card.classList.contains('card')) return;
+    var desc=directDescription(card);
+    var title=cardTitle(card);
+
+    /* Se esiste già la vecchia i contestuale, la manteniamo: nessun duplicato. */
+    var existing=card.querySelector('.v222-info-btn, .ob-v26377-info');
+    if(existing){
+      existing.classList.add('ob-v26377-info');
+      return;
+    }
+
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='ob-v26377-info v222-no-print';
+    b.textContent='i';
+    b.title='Informazioni su '+title;
+    b.setAttribute('aria-label','Informazioni su '+title);
+    b.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      showInfo(title,desc);
     });
+    card.appendChild(b);
   }
-  function schedule(){
-    if(scheduled) return; scheduled=true;
-    setTimeout(()=>{scheduled=false;normalize();},80);
+
+  function normalizeHome(){
+    var grid=document.getElementById('homeGrid');
+    if(!grid) return;
+    var cards=grid.children;
+    for(var i=0;i<cards.length;i++) addInfoToCard(cards[i]);
   }
+
   function init(){
-    normalize();
-    setTimeout(normalize,650); // dopo i vecchi inserimenti info
-    setTimeout(normalize,1400); // include la card Amministrazione caricata dopo il profilo
-    const grid=document.getElementById('homeGrid');
-    if(grid) new MutationObserver(schedule).observe(grid,{childList:true,subtree:true});
+    normalizeHome();
+    /* Gli script storici aggiungono alcune i e la card Admin dopo il caricamento. */
+    window.setTimeout(normalizeHome,500);
+    window.setTimeout(normalizeHome,1200);
+    window.setTimeout(normalizeHome,2200);
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
 })();
 </script>
 </body>
