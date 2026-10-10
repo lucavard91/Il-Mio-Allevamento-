@@ -1915,7 +1915,7 @@ html.ob-return-from-admin #obAdminReturnTransition,#obAdminReturnTransition.ob-t
 </div>
     <div class="ob-v34-color-fields" id="obV34ColorFields">
       <label>Colore <span class="small">(facoltativo)</span></label>
-      <input id="s_colore" type="text" placeholder="Es. Giallo, Rosso, Bianco, Verde..." list="obV34Colors" autocomplete="off"><datalist id="obV34Colors"></datalist>
+      <input id="s_colore" type="text" placeholder="Scrivi o scegli un colore" autocomplete="off"><div class="ob-inline-suggestions hidden" data-ob-hints="colore"></div>
       <div id="obV34FeatherField">
         <label>Categoria piumaggio <span class="small">(se applicabile)</span></label>
         <select id="s_categoria_piumaggio"><option value="">— Nessuna —</option><option>Intenso</option><option>Brinato</option><option>Mosaico</option></select>
@@ -6896,6 +6896,38 @@ box.innerHTML = `
     if(domain.includes("color")||domain.includes("colore")||z.includes("canarino di colore"))return canaryCategories[0];
     return canaryCategories[4];
   };
+  const colorTypes=new Set(["BASE_COLOR","BASE_COLOR_GENETIC","LIPOCHROME","LIPOCHROME_EXPRESSION","COLOR_FACTOR","WING_EXPRESSION"]);
+  const colorItems=()=>{
+    const ids=taxIds();if(!ids.size)return [];
+    return uniq(C.phenotypes.filter(p=>ids.has(String(p.taxon_id))&&colorTypes.has(String(p.component_type||"").toUpperCase()))
+      .map(p=>{
+        const name=italian(p)||String(p.name||"");
+        const translated={red:"Rosso",yellow:"Giallo",white:"Bianco",green:"Verde",blue:"Blu",ivory:"Avorio",black:"Nero",brown:"Bruno",grey:"Grigio",gray:"Grigio"};
+        return translated[norm(name)]||name;
+      })
+      // I sinonimi stranieri restano ricercabili nei cataloghi genetici, non sono colori duplicati.
+      .filter(Boolean));
+  };
+  const hideColorSuggestions=()=>{
+    const box=document.querySelector('[data-ob-hints="colore"]');
+    if(box)box.classList.add("hidden");
+  };
+  const showColorSuggestions=()=>{
+    const input=$id("s_colore"),box=document.querySelector('[data-ob-hints="colore"]');
+    if(!input||!box)return;
+    const q=norm(input.value);
+    const items=colorItems().filter(v=>!q||norm(v).includes(q)).slice(0,35);
+    box.replaceChildren();
+    items.forEach(label=>{
+      const button=document.createElement("button");button.type="button";button.className="ob-inline-suggestion";
+      button.textContent=label;
+      const select=()=>{input.value=label;hideColorSuggestions();input.dispatchEvent(new Event("change",{bubbles:true}));};
+      button.addEventListener("pointerdown",e=>{e.preventDefault();select()});
+      button.addEventListener("click",select);
+      box.appendChild(button);
+    });
+    box.classList.toggle("hidden",!items.length);
+  };
   const updateCategory=()=>{
     const field=$id("s_categoria_specie");if(!field)return;
     const taxa=selectedTaxa(),isCan=taxa.some(isCanary),group=taxa[0]?.group_code||"";
@@ -6907,16 +6939,8 @@ box.innerHTML = `
     field.value=choices.includes(was)?was:(isCan?"":(choices[0]||""));
     const feather=$id("obV34FeatherField");if(feather)feather.hidden=!isCan;
     if(!isCan&&$id("s_categoria_piumaggio"))$id("s_categoria_piumaggio").value="";
-    // I colori suggeriti provengono da Supabase, senza liste fisse nell'index.
-    // Dove il catalogo non è completo, il campo rimane liberamente compilabile.
-    const datalist=$id("obV34Colors");
-    if(datalist){
-      datalist.replaceChildren();
-      const ids=new Set(taxa.map(t=>String(t.id)));
-      const colorTypes=new Set(["BASE_COLOR","BASE_COLOR_GENETIC","LIPOCHROME","LIPOCHROME_EXPRESSION"]);
-      const colors=uniq(C.phenotypes.filter(p=>ids.has(String(p.taxon_id))&&colorTypes.has(String(p.component_type||"").toUpperCase())).flatMap(p=>[p.name,...aliases(p)]));
-      colors.forEach(v=>datalist.appendChild(new Option(v)));
-    }
+    // I colori si ricavano dal catalogo Supabase e non da un elenco incluso nell'HTML.
+    hideColorSuggestions();
   };
   const breedItems=()=>{
     const s=norm($id("s_specie")?.value||""),ids=taxIds(),cat=currentCategory();
@@ -6944,7 +6968,14 @@ box.innerHTML = `
   $id("s_specie")?.addEventListener("change",()=>{updateCategory();$id("s_razza").value="";updateDisplay()});
   $id("s_categoria_specie")?.addEventListener("change",()=>{$id("s_razza").value="";updateDisplay()});
   ["s_razza","s_mutazione","s_colore","s_categoria_piumaggio"].forEach(id=>{const el=$id(id);el?.addEventListener("input",updateDisplay);el?.addEventListener("change",updateDisplay)});
-  $id("newSoggetto")?.addEventListener("click",()=>{obV34ResetDetails();updateCategory()});
+  const colorInput=$id("s_colore");
+  if(colorInput){
+    colorInput.addEventListener("focus",showColorSuggestions);
+    colorInput.addEventListener("click",showColorSuggestions);
+    colorInput.addEventListener("input",showColorSuggestions);
+    colorInput.addEventListener("blur",()=>setTimeout(hideColorSuggestions,180));
+  }
+  $id("newSoggetto")?.addEventListener("click",()=>{obV34ResetDetails();updateCategory();hideColorSuggestions()});
   updateCategory();
   const canaryMutationItems=()=>{
     const ids=taxIds();
